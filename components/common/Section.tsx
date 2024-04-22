@@ -27,7 +27,7 @@ const Section = ({title = "Title", description, children} : SectionProps) => {
                 <CardTitle className="text-algoMarron dark:text-algoOrange">{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4 h-[80vh]">
+            <CardContent className="grid gap-4 h-[60vh]">
                 <ScrollArea>
                     {children}
                 </ScrollArea>

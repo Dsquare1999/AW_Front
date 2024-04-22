@@ -43,6 +43,30 @@ export default function App({data, title}: {data: dataProps, title: string}) {
         text: title,
       },
     },
+    tooltip: {
+      callbacks: {
+        label: function(context : any) {
+          var label = context.dataset.label || '';
+          if (label) {
+            label += ': ';
+          }
+          label += context.parsed.y;
+          return label;
+        },
+        afterLabel: function(context : any) {
+          var index = context.dataIndex;
+          var data = context.dataset.data[index];
+          var pieChartData = {
+            labels: ['A', 'B', 'C'],
+            datasets: [{
+              data: [1000, 2000, 3000],
+              backgroundColor: ['red', 'green', 'blue'],
+            }],
+          };
+          return 'Additional Info:';
+        },
+      },
+    },
   };
   return <Bar options={options} data={data} />;
 }
