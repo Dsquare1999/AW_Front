@@ -1,6 +1,6 @@
 'use client'
 import { OutstandingData } from "@/data/OutstandingData";
-import { Chart } from "../charts";
+import { Chart, Table } from "../charts";
 import Section from "./Section";
 import { BondProp } from "@/app/types/BondType";
 import { useCallback, useState } from "react";
@@ -17,18 +17,6 @@ const DisplayBondPortofolio = ({ bonds }: DisplayBondPortofolioProps) => {
     const [selectedBar, setSelectedBar] = useState<boolean | null>(null);
     const [detailLabel, setDetailLabel] = useState<string | null>(null);
     const [detailData, setDetailData] = useState<number | null>(null);
-
-    // const handleBarClick = (element: InteractionItem[]) => {
-    //     if (!element.length) return;
-
-    //     const { datasetIndex, index } = element[0];
-
-    //     setSelectedBar(true);
-    //     setDetailLabel(OutstandingData(bonds).labels[index]);
-    //     setDetailData(OutstandingData(bonds).datasets[datasetIndex].data[index]);
-
-    //     console.log(OutstandingData(bonds).labels[index], OutstandingData(bonds).datasets[datasetIndex].data[index]);
-    // }
 
     const handleBarClick = useCallback((element: InteractionItem[]) => {
         if (element.length) {
@@ -51,10 +39,13 @@ const DisplayBondPortofolio = ({ bonds }: DisplayBondPortofolioProps) => {
 
     return (
         <Section title="Bonds Portofolio" description="This is a summary of your portofolio ...">
-            <div className="w-full flex space-x-4">
-                <Chart type="bar" data={OutstandingData(bonds)} title={`Bond Portofolio Outstanding `} callback={(element) => handleBarClick(element)} />
+            <div className="w-full flex items-center justify-center space-x-4">
+                <div className={`${selectedBar !== null ? 'w-[50%]' : 'w-[50%]'}`}>
+                    <Table data={OutstandingData(bonds, false)} title={`Bond Portofolio Outstanding `} />
+                    <Chart type="bar" data={OutstandingData(bonds, false)} title={`Bond Portofolio Outstanding `} callback={(element) => handleBarClick(element)} />
+                </div>
                 {selectedBar !== null && detailLabel !== null && detailData !== null && (
-                    <div>
+                    <div className={`${selectedBar !== null ? 'w-[45%]' : ''}`}>
                         <BondPortofolioDetails bonds={bonds} detailLabel={detailLabel} detailData={detailData} />
                     </div>
                 )}

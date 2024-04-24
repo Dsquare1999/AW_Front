@@ -88,10 +88,19 @@ export default function App({
         // printElementsAtEvent(getElementsAtEvent(chart, event));
     };
 
+    const onDoubleClick = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+        const { current: chart } = chartRef;
+        if (!chart) {
+            return;
+        }
+        console.log('Double Click');
+    }
+
     return <Chart
         ref={chartRef}
         type={type as keyof ChartTypeRegistry}
         onClick={onClick}
+        onDoubleClick={onDoubleClick}
         options={options}
         data={data}
     />

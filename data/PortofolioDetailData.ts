@@ -26,7 +26,7 @@ export const PortofolioDetailData = (bonds: BondProp[], detailLabel: string, det
     const datasets = [{
         label: `Portofolio Outstandings Details -- ${formatDate(from)} to ${formatDate(to)}`,
         data: detailValues,
-        backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`,
+        backgroundColor: labels.map(() => `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`)
     }];
 
     return {
