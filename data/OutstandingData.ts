@@ -11,13 +11,16 @@ export const OutstandingData = ( bonds: BondProp[]) => {
 
     let allDates: Date[] = [];
 
-    bonds.forEach(bond => {
+    bonds.map((bond) => {
         allDates.push(new Date(bond.value_date));
         allDates.push(new Date(bond.due_date));
     });
 
     allDates.sort((a, b) => a.getTime() - b.getTime());
     allDates = Array.from(new Set(allDates));
+    console.log('All Dates', allDates);
+
+    // allDates = allDates.filter((value, index, self) => self.indexOf(value) === index);
 
     let outstandingValues : number[] = [];
     let labels : string[] = [];
