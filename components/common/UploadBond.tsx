@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import { useCallback, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,17 +21,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { FaDeleteLeft } from "react-icons/fa6";
-
- 
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-
 
 import { Columns } from "../utils/datatable/column";
 import { DataTable } from "../utils/datatable/dataTable";
@@ -40,7 +36,7 @@ import { HeaderProps } from "../utils/datatable/column";
 import axios from "axios";
 
 import { AdminBondFieldName } from "@/schemas/AdminBondSchema";
-import { BondFields } from "@/data/bondFields"
+import { BondFields } from "@/data/bondFields";
 
 interface SelectField {
   name: AdminBondFieldName;
@@ -50,37 +46,47 @@ interface SelectField {
 }
 
 interface RowData {
-  rowId : string
-  [key: string]: any
+  rowId: string;
+  [key: string]: any;
 }
 
 interface SheetsProps {
-  sheetId: string
-  sheetName: string
-  endpoint: string | null
-  headers: string[]
-  rows: RowData[]
-  errors?: string[]
+  sheetId: string;
+  sheetName: string;
+  endpoint: string | null;
+  headers: string[];
+  rows: RowData[];
+  errors?: string[];
 }
 
 interface DataTableProps {
-  fileId: string
-  fileName: string
-  sheets: SheetsProps[]
+  fileId: string;
+  fileName: string;
+  sheets: SheetsProps[];
 }
 
 interface UploadProps {
-  endpoint?: string
-  isAdmin : boolean
-  title?: string
-  previsualize : (dataTableData: DataTableProps[], rejectedDataTableData : DataTableProps[], endpoint: string|undefined, isAdmin: boolean) => void;
+  endpoint?: string;
+  isAdmin: boolean;
+  title?: string;
+  previsualize: (
+    dataTableData: DataTableProps[],
+    rejectedDataTableData: DataTableProps[],
+    endpoint: string | undefined,
+    isAdmin: boolean
+  ) => void;
 }
 
 const formSchema = z.object({
   file: z.string().optional(),
 });
 
-export default function UploadBond({endpoint, isAdmin, title, previsualize}: UploadProps) {
+export default function UploadBond({
+  endpoint,
+  isAdmin,
+  title,
+  previsualize,
+}: UploadProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -91,11 +97,22 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
 
-  const [dataTableData, setDataTableData] = useState<DataTableProps[]>([])
-  const [rejectedDataTableData, setRejectedDataTableData] = useState<DataTableProps[]>([])
+  const [dataTableData, setDataTableData] = useState<DataTableProps[]>([]);
+  const [rejectedDataTableData, setRejectedDataTableData] = useState<
+    DataTableProps[]
+  >([]);
 
-  const acceptedSheetNames: string[] = ['bond', 'dat', 'dav', 'eib', 'pib', 'refi', 'customer_loan', 'op injection', 'op withdrawal']
-
+  const acceptedSheetNames: string[] = [
+    "bond",
+    "dat",
+    "dav",
+    "eib",
+    "pib",
+    "refi",
+    "customer_loan",
+    "op injection",
+    "op withdrawal",
+  ];
 
   // -------------- Drag and Drop ---------------------------------------------------
 
@@ -149,72 +166,70 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
     setFiles(newArr);
   };
 
-  
-
   // ----------------------  Control & Verification -----------------------------------------
 
-  const isSheetNameAccepted = (sheetName: string): { status: boolean, acceptedSheetName: string | null } => {
-    let endpoint : string = ""
+  const isSheetNameAccepted = (
+    sheetName: string
+  ): { status: boolean; acceptedSheetName: string | null } => {
+    let endpoint: string = "";
     const found = acceptedSheetNames.some((eachAcceptedSheetName) => {
       if (sheetName.toLowerCase().includes(eachAcceptedSheetName)) {
-        endpoint = eachAcceptedSheetName
+        endpoint = eachAcceptedSheetName;
         return true;
       }
       return false;
     });
-  
+
     if (found) {
       return { status: true, acceptedSheetName: endpoint };
     } else {
       return { status: false, acceptedSheetName: null };
     }
-  }
-  
-  let isinField: SelectField
+  };
 
-  BondFields.map((field) =>{
-    if(field.name == "isin"){
-      isinField = field as SelectField
+  let isinField: SelectField;
+
+  BondFields.map((field) => {
+    if (field.name == "isin") {
+      isinField = field as SelectField;
     }
+  });
 
-  })
-
-  const isValidRow = (row: RowData): { status: boolean, error: string } => {
-
+  const isValidRow = (row: RowData): { status: boolean; error: string } => {
     // isin checking
-    if(!isAdmin && !isinField.options.includes(row.isin)){
+    if (!isAdmin && !isinField.options.includes(row.isin)) {
       return {
-          status: false,
-          error: "Unknown Bond isin"
+        status: false,
+        error: "Unknown Bond isin",
       };
     }
-    
+
     // due date
     if (!isValidDate(row.due_date)) {
       return {
-          status: false,
-          error: "The date value is not valid"
+        status: false,
+        error: "The date value is not valid",
       };
     }
 
     // facial rate
     if (row.facial_rate === undefined) {
-        return {
-            status: false,
-            error: "Facial rate is missing"
-        };
+      return {
+        status: false,
+        error: "Facial rate is missing",
+      };
     }
 
     if (isNaN(row.facial_rate)) {
       return {
         status: false,
-        error: "The facial rate is not a number"
+        error: "The facial rate is not a number",
       };
     }
 
     return {
       status: true,
-      error: "Everything is great !"
+      error: "Everything is great !",
     };
   };
 
@@ -222,17 +237,16 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
     return !isNaN(new Date(date).getTime());
   };
 
-  // ---------------- Transform files -------------------------------------------------------- 
+  // ---------------- Transform files --------------------------------------------------------
 
   const importExcel = async () => {
-
-    const FilesDataTables: DataTableProps[] = []
-    const RejectedFilesDataTables: DataTableProps[] = []
+    const FilesDataTables: DataTableProps[] = [];
+    const RejectedFilesDataTables: DataTableProps[] = [];
 
     files.forEach((this_file: File) => {
-      const fileId = uuidv4()
-      const Sheets: SheetsProps[] = []
-      const RejectedSheets: SheetsProps[] = []
+      const fileId = uuidv4();
+      const Sheets: SheetsProps[] = [];
+      const RejectedSheets: SheetsProps[] = [];
 
       if (this_file) {
         const reader = new FileReader();
@@ -245,122 +259,124 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
             const workSheetId = uuidv4();
 
             const workSheet = workBook.Sheets[workSheetName];
-            const fileData = XLSX.utils.sheet_to_json(workSheet, { header: 1 }) as string[][];
+            const fileData = XLSX.utils.sheet_to_json(workSheet, {
+              header: 1,
+            }) as string[][];
             const headers: string[] = fileData[0] as string[];
             fileData.splice(0, 1);
             const thisSheetRows = convertToJson(headers, fileData);
-            const rejectedRows: RowData[] = []
-            const acceptedRows: RowData[] = []
-            const errorsRows: string[] = []
+            const rejectedRows: RowData[] = [];
+            const acceptedRows: RowData[] = [];
+            const errorsRows: string[] = [];
 
-            if(endpoint){
+            if (endpoint) {
               thisSheetRows.forEach((row) => {
-                if (!(isValidRow(row).status))   {
-                  rejectedRows.push(row)
-                  errorsRows.push(isValidRow(row).error)
+                if (!isValidRow(row).status) {
+                  rejectedRows.push(row);
+                  errorsRows.push(isValidRow(row).error);
                 } else {
-                  acceptedRows.push(row)
+                  acceptedRows.push(row);
                 }
               });
               Sheets.push({
-                "sheetId": workSheetId,
-                "endpoint": endpoint,
-                "sheetName": workSheetName,
-                "headers": headers,
-                "rows": acceptedRows
-              })
+                sheetId: workSheetId,
+                endpoint: endpoint,
+                sheetName: workSheetName,
+                headers: headers,
+                rows: acceptedRows,
+              });
               RejectedSheets.push({
-                "sheetId": workSheetId,
-                "endpoint": endpoint,
-                "sheetName": workSheetName,
-                "headers": headers,
-                "rows": rejectedRows,
-                "errors": errorsRows
-              })
-            }else{
+                sheetId: workSheetId,
+                endpoint: endpoint,
+                sheetName: workSheetName,
+                headers: headers,
+                rows: rejectedRows,
+                errors: errorsRows,
+              });
+            } else {
               if (isSheetNameAccepted(workSheetName).status) {
-                const endpoint = isSheetNameAccepted(workSheetName).acceptedSheetName
-  
+                const endpoint =
+                  isSheetNameAccepted(workSheetName).acceptedSheetName;
+
                 thisSheetRows.forEach((row) => {
-                  if (!(isValidRow(row).status))   {
-                    rejectedRows.push(row)
-                    errorsRows.push(isValidRow(row).error)
+                  if (!isValidRow(row).status) {
+                    rejectedRows.push(row);
+                    errorsRows.push(isValidRow(row).error);
                   } else {
-                    acceptedRows.push(row)
+                    acceptedRows.push(row);
                   }
                 });
                 Sheets.push({
-                  "sheetId": workSheetId,
-                  "endpoint": endpoint,
-                  "sheetName": workSheetName,
-                  "headers": headers,
-                  "rows": acceptedRows
-                })
+                  sheetId: workSheetId,
+                  endpoint: endpoint,
+                  sheetName: workSheetName,
+                  headers: headers,
+                  rows: acceptedRows,
+                });
                 RejectedSheets.push({
-                  "sheetId": workSheetId,
-                  "endpoint": endpoint,
-                  "sheetName": workSheetName,
-                  "headers": headers,
-                  "rows": rejectedRows,
-                  "errors": errorsRows
-                })
+                  sheetId: workSheetId,
+                  endpoint: endpoint,
+                  sheetName: workSheetName,
+                  headers: headers,
+                  rows: rejectedRows,
+                  errors: errorsRows,
+                });
               } else {
                 thisSheetRows.forEach((row) => {
                   rejectedRows.push(row);
                 });
                 RejectedSheets.push({
-                  "sheetId": workSheetId,
-                  "endpoint": null,
-                  "sheetName": workSheetName,
-                  "headers": headers,
-                  "rows": rejectedRows
-                })
+                  sheetId: workSheetId,
+                  endpoint: null,
+                  sheetName: workSheetName,
+                  headers: headers,
+                  rows: rejectedRows,
+                });
               }
             }
-
-            
-
-          })
-
+          });
         };
         reader.readAsBinaryString(this_file);
       }
       FilesDataTables.push({
-        "fileId": fileId,
-        "fileName": this_file.name,
-        "sheets": Sheets
-      })
+        fileId: fileId,
+        fileName: this_file.name,
+        sheets: Sheets,
+      });
       RejectedFilesDataTables.push({
-        "fileId": fileId,
-        "fileName": this_file.name,
-        "sheets": RejectedSheets
-      })
-    })
-    console.log("FilesDataTables", FilesDataTables)
-    setDataTableData(FilesDataTables)
-    setRejectedDataTableData(RejectedFilesDataTables)
+        fileId: fileId,
+        fileName: this_file.name,
+        sheets: RejectedSheets,
+      });
+    });
+    console.log("FilesDataTables", FilesDataTables);
+    setDataTableData(FilesDataTables);
+    setRejectedDataTableData(RejectedFilesDataTables);
     setTimeout(() => {
       previsualize(FilesDataTables, RejectedFilesDataTables, endpoint, isAdmin);
-    }, 1000)
-    
+    }, 1000);
   };
 
   const convertToJson = (headers: string[], data: any[][]) => {
     const rows: RowData[] = [];
     data.forEach((row: any[]) => {
-      let rowData: RowData = {rowId: ''};
+      let rowData: RowData = { rowId: "" };
       row.forEach((element, index) => {
-        if (!isNaN(element) && (headers[index] === "due_date" || headers[index] === "value_date")) {
-          rowData[headers[index]] = convertToDate(element)
+        if (
+          !isNaN(element) &&
+          (headers[index] === "due_date" || headers[index] === "value_date")
+        ) {
+          rowData[headers[index]] = convertToDate(element);
         } else if (headers[index] === "facial_rate") {
           rowData[headers[index]] = parseFloat(element);
         } else {
-          rowData[headers[index]] = typeof element === 'string' ? element.trim() : element
+          rowData[headers[index]] =
+            typeof element === "string" ? element.trim() : element;
         }
       });
-      rowData['rowId'] = uuidv4();
+      rowData["rowId"] = uuidv4();
       console.log("rowData --->", rowData);
-      setTabledata(row)
+      setTabledata(row);
       rows.push(rowData);
     });
     return rows;
@@ -373,18 +389,18 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
     const date = new Date(referenceDate.getTime() + millisecondsPerDay);
 
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
-    const day = date.getDate().toString().padStart(2, '0'); 
-    
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+
     const formattedDate = `${year}-${month}-${day}`;
-    
+
     return formattedDate;
   };
 
   const handlePrevisualize = useCallback(() => {
     // console.log('UploadBond dataTableData', JSON.stringify(dataTableData))
     previsualize(dataTableData, rejectedDataTableData, endpoint, isAdmin);
-  }, [dataTableData, rejectedDataTableData])
+  }, [dataTableData, rejectedDataTableData, endpoint, isAdmin, previsualize]);
 
   // ----------------------- Render the front -------------------------------------------------
 
@@ -393,13 +409,15 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
   return (
     <div className="w-full flex flex-col items-center justify-center space-y-5 p-2">
       <Form {...form}>
-        <form className="w-full" onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
-
+        <form
+          className="w-full"
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
+        >
           <div
-            className={`${dragActive ? "bg-blue-400" : "bg-blue-200"
-            // className={`${dragActive ? "bg-foreground/50" : "bg-foreground/20"
-              } p-4 w-full rounded-lg  min-h-[10rem] text-center flex flex-col items-center justify-center`}
-
+            className={`${
+              dragActive ? "bg-blue-400" : "bg-blue-200"
+              // className={`${dragActive ? "bg-foreground/50" : "bg-foreground/20"
+            } p-4 w-full rounded-lg  min-h-[10rem] text-center flex flex-col items-center justify-center`}
             onDragEnter={handleDragEnter}
             onDrop={handleDrop}
             onDragLeave={handleDragLeave}
@@ -411,7 +429,9 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel className="font-bold text-center underline text-lg text-black">{title? title : "Upload Portofolios"}</FormLabel>
+                    <FormLabel className="font-bold text-center underline text-lg text-black">
+                      {title ? title : "Upload Portofolios"}
+                    </FormLabel>
                     <p className="text-sm text-black">
                       Drag & Drop files or{" "}
                       <span
@@ -435,9 +455,9 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
                       />
                     </FormControl>
                     <div className="flex flex-col items-center p-2">
-                      {files.map((file, idx) => ( 
+                      {files.map((file, idx) => (
                         <div key={idx} className="flex flex-row space-x-5">
-                          <span>  {file.name}   </span>
+                          <span> {file.name} </span>
                           <span
                             className="text-red-500 cursor-pointer flex items-center justify-center"
                             onClick={() => removeFile(file.name, idx)}
@@ -452,9 +472,17 @@ export default function UploadBond({endpoint, isAdmin, title, previsualize}: Upl
                 );
               }}
             />
-            <div className="flex space-x-4">
-              <Button type="button" onClick={importExcel} disabled={files.length === 0}>Previsualize Data</Button>
-            </div>
+            {files.length !== 0 && (
+              <div className="flex space-x-4">
+                <Button
+                  type="button"
+                  onClick={importExcel}
+                  disabled={files.length === 0}
+                >
+                  Previsualize Data
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       </Form>

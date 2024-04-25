@@ -40,8 +40,8 @@ const DisplayBondPortofolio = ({ bonds }: DisplayBondPortofolioProps) => {
     return (
         <Section title="Bonds Portofolio" description="This is a summary of your portofolio ...">
             <div className="w-full flex items-center justify-center space-x-4">
-                <div className={`${selectedBar !== null ? 'w-[50%]' : 'w-[50%]'}`}>
-                    <Table data={OutstandingData(bonds, false)} title={`Bond Portofolio Outstanding `} />
+                <div className={`${selectedBar !== null ? 'w-[50%]' : 'w-full'}`}>
+                    {/* <Table data={OutstandingData(bonds, false)} title={`Bond Portofolio Outstanding `} /> */}
                     <Chart type="bar" data={OutstandingData(bonds, false)} title={`Bond Portofolio Outstanding `} callback={(element) => handleBarClick(element)} />
                 </div>
                 {selectedBar !== null && detailLabel !== null && detailData !== null && (

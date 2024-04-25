@@ -1,4 +1,5 @@
 "use client";
+
 import AuthNavBar from "@/components/auth/auth-navbar";
 import {
   ResizableHandle,
@@ -19,6 +20,8 @@ import BondPortofolioPage from "@/components/common/BondPortofolioPage";
 import { CashflowData } from "@/data/CashflowsData";
 import { BondProp } from "../types/BondType";
 import DisplayBondPortofolio from "@/components/common/DisplayBondPortofolio";
+import BilanPage from "@/components/common/BilanPage";
+import Sidebar from "@/components/common/Sidebar";
 
 const ALMPage = () => {
   // Authentication redirection
@@ -55,6 +58,7 @@ const ALMPage = () => {
     }
   }, [myBilan]);
 
+
   return (
     <div
       className="flex flex-col w-full h-full"
@@ -69,12 +73,9 @@ const ALMPage = () => {
       >
         <AuthNavBar />
       </div>
-      <main className="h-[100vh] overflow-hidden grid grid-cols-3 gap-4 justify-items-center border pt-5">
-        {/* <ScrollArea className="grid col-span-3">
-                    <UploadBondPage/>
-                    <ScrollBar orientation="vertical" />
-                </ScrollArea> */}
-        <div className="w-[80%] col-span-3 flex flex-col">
+      <main className="h-[100vh] overflow-hidden flex space-x-2 justify-items-center border pt-5">
+        <Sidebar  />
+        <div className="flex flex-col">
           <ResizablePanelGroup
             direction="vertical"
             className="min-h-[90vh] w-full rounded-lg border p-2"
@@ -88,7 +89,9 @@ const ALMPage = () => {
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>
-        <section className="grid col-span-1 "></section>
+        <section className="">
+            <BilanPage />
+        </section>
       </main>
     </div>
   );
