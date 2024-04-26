@@ -1,8 +1,9 @@
-import { cookies } from "next/headers";
-import { ChatLayout } from "./chat-layout";
+import Cookies from "js-cookie";
+import { ChatLayout } from "@/components/chat/chat-layout";
 
-const layout = cookies().get("react-resizable-panels:layout");
-const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
+
+const layout = Cookies.get("react-resizable-panels:layout");
+const defaultLayout = layout ? JSON.parse(layout) : undefined;
 
 const ChatContainer = () => {
     return ( 

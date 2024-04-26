@@ -13,6 +13,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import UploadBondPage from "./UploadBondPage";
 import { Button } from "../ui/button";
+import ChatContainer from "../chat/chat-container";
 
 const Sidebar = () => {
   return (
@@ -151,27 +152,36 @@ const Sidebar = () => {
             </svg>
             <span className="md:ml-2 text-sm font-medium sr-only sm:not-sr-only sm:whitespace-nowrap">Settings</span>
           </a>
-          <a
-            className="relative flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
-            href="#"
-          >
-            <svg
-              className="w-6 h-6 stroke-current"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-              />
-            </svg>
-            <span className="md:ml-2 text-sm font-medium sr-only sm:not-sr-only sm:whitespace-nowrap">Messages</span>
-            <span className="absolute top-0 left-0 w-2 h-2 mt-2 ml-2 bg-indigo-500 rounded-full"></span>
-          </a>
+          <Drawer>
+            <DrawerTrigger className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300">
+              <a
+                className="relative flex items-center w-full"
+                href="#"
+              >
+                <svg
+                  className="w-6 h-6 stroke-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                  />
+                </svg>
+                <span className="md:ml-2 text-sm font-medium sr-only sm:not-sr-only sm:whitespace-nowrap">Messages</span>
+                <span className="absolute top-[-7px] left-[-10px] w-2 h-2 mt-2 ml-2 bg-indigo-500 rounded-full"></span>
+              </a>
+            </DrawerTrigger>
+            <DrawerContent>
+              <ScrollArea className="flex w-full">
+                <ChatContainer />
+              </ScrollArea>
+            </DrawerContent>
+          </Drawer>
         </div>
       </div>
       <a
