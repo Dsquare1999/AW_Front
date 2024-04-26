@@ -29,14 +29,14 @@ import { FaDeleteLeft } from "react-icons/fa6";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Columns } from "../utils/datatable/column";
-import { DataTable } from "../utils/datatable/dataTable";
-import { HeaderProps } from "../utils/datatable/column";
+import { Columns } from "../../utils/datatable/column";
+import { DataTable } from "../../utils/datatable/dataTable";
+import { HeaderProps } from "../../utils/datatable/column";
 
 import axios from "axios";
 
 import { AdminBondFieldName } from "@/schemas/AdminBondSchema";
-import { BondFields } from "@/data/bondFields";
+import { BondFields } from "@/data/fields/bondFields";
 
 interface SelectField {
   name: AdminBondFieldName;

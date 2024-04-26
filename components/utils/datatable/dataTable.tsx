@@ -39,8 +39,8 @@ import { Input } from "@/components/ui/input"
 
 import { BondSchema, AdminBondSchema } from "@/schemas";
 
-import { BondFields } from "@/data/bondFields" 
-import { AdminBondFields } from "@/data/AdminBondFields";
+import { BondFields } from "@/data/fields/bondFields" 
+import { AdminBondFields } from "@/data/fields/AdminBondFields";
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"

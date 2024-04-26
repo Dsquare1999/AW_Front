@@ -17,8 +17,8 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { DateRangePicker } from "@/components/ui/date-range-picker";
-import { DurationData } from "@/data/DurationData";
-import { DurationEncoursData } from "@/data/DurationEncoursData";
+import { DurationData } from "@/data/bonds/DurationData";
+import { DurationEncoursData } from "@/data/bonds/DurationEncoursData";
 import { useState } from "react";
 
 interface DurationViewProps {

@@ -1,4 +1,4 @@
-import { OutstandingData } from "@/data/OutstandingData";
+import { OutstandingData } from "@/data/bonds/OutstandingData";
 import { Bar, Chart, Doughnut, Pie, Radar, Table } from "../charts";
 import {
   Menubar,
@@ -25,7 +25,7 @@ import { PiTableFill } from "react-icons/pi";
 import { IoExpandOutline } from "react-icons/io5";
 
 import { BondProp } from "@/app/types/BondType";
-import { PortofolioDetailData } from "@/data/PortofolioDetailData";
+import { PortofolioDetailData } from "@/data/bonds/PortofolioDetailData";
 import { useState } from "react";
 
 interface BondPortofolioDetailsProps {

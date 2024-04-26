@@ -24,9 +24,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { toast } from "@/components/ui/use-toast"
-import UploadBond from "@/components/common/UploadBond";
+import UploadBond from "@/components/alm/uploads/UploadBond";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import UploadBondPage from "@/components/common/UploadBondPage";
+import UploadBondPage from "@/components/alm/uploads/UploadBondPage";
 
 export default function Admin() {
 

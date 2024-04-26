@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Section from "./Section";
+import Section from "../../../common/Section";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,

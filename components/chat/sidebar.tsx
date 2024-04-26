@@ -26,6 +26,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
+  // isCollapsed = true
   return (
     <div
       data-collapsed={isCollapsed}

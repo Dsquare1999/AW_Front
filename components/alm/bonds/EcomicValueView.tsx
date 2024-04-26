@@ -18,7 +18,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 
-import { EconomicValuesData } from "@/data/EconomicValuesData";
+import { EconomicValuesData } from "@/data/bonds/EconomicValuesData";
 import { useState } from "react";
 
 interface EconomicValueViewProps {

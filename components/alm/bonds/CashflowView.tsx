@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 
 import { CashflowProp } from "@/app/types/BondType";
-import { CashflowData } from "@/data/CashflowsData";
+import { CashflowData } from "@/data/bonds/CashflowsData";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { useCallback, useState } from "react";
 

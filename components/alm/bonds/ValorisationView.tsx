@@ -16,7 +16,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { ValorisationProp } from "@/app/types/BondType";
-import { ValorisationData } from "@/data/ValorisationData";
+import { ValorisationData } from "@/data/bonds/ValorisationData";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { useState } from "react";
 

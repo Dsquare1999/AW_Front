@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export type AdminBondFieldName =
     | "isin"
+    | "country"
     | "space"
     | "description"
     | "entity"
@@ -25,6 +26,9 @@ const AddAdminBondSchema = z.object({
       message: "Bond Isin is too short"
     }),
   
+    country: z.string().trim().min(1, {
+      message: 'Bond Country is required'
+    }), 
     space: z.string().trim().min(1, {
       message: 'Bond Space is required'
     }), 

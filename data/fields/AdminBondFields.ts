@@ -48,6 +48,12 @@ export const AdminBondFields : AllAddFormField[] = [
         placeholder: "Code Isin",
     },
     {
+        name : "country",
+        type : "select",
+        placeholder: "Country",
+        options: ['Benin', 'Togo', 'IvoryCoast', 'Ghana', 'Nigeria']
+    },
+    {
         name : "space",
         type : "select",
         placeholder: "Economic Space",

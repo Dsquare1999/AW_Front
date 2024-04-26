@@ -1,7 +1,7 @@
 'use client'
-import { OutstandingData } from "@/data/OutstandingData";
-import { Chart, Table } from "../charts";
-import Section from "./Section";
+import { OutstandingData } from "@/data/bonds/OutstandingData";
+import { Chart, Table } from "../../../charts";
+import Section from "../../../common/Section";
 import { BondProp } from "@/app/types/BondType";
 import { useCallback, useState } from "react";
 import type { InteractionItem } from 'chart.js';

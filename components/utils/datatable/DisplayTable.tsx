@@ -8,7 +8,7 @@ import { useState } from "react"
 import { DataTable } from "./dataTable"
 import { Columns } from "./column"
 import { AdminBondFieldName } from "@/schemas/AdminBondSchema";
-import { BondFields } from "@/data/bondFields"
+import { BondFields } from "@/data/fields/bondFields"
 
 interface RowData {
     rowId : string

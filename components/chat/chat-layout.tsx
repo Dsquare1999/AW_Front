@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { userData } from "@/data/chats";
 import React, { useEffect, useState } from "react";
 import {
@@ -30,14 +30,9 @@ export function ChatLayout({
     const checkScreenWidth = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-
-    // Initial check
     checkScreenWidth();
-
-    // Event listener for screen width changes
     window.addEventListener("resize", checkScreenWidth);
 
-    // Cleanup the event listener on component unmount
     return () => {
       window.removeEventListener("resize", checkScreenWidth);
     };
@@ -47,9 +42,7 @@ export function ChatLayout({
     <ResizablePanelGroup
       direction="horizontal"
       onLayout={(sizes: number[]) => {
-        document.cookie = `react-resizable-panels:layout=${JSON.stringify(
-          sizes
-        )}`;
+        Cookies.set(`react-resizable-panels:layout`, JSON.stringify(sizes));
       }}
       className="h-full items-stretch"
     >
@@ -61,15 +54,14 @@ export function ChatLayout({
         maxSize={isMobile ? 8 : 30}
         onCollapse={() => {
           setIsCollapsed(true);
-          document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
-            true
-          )}`;
+          Cookies.set(`react-resizable-panels:collapsed`, JSON.stringify(true));
         }}
         onExpand={() => {
           setIsCollapsed(false);
-          document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
-            false
-          )}`;
+          Cookies.set(`react-resizable-panels:collapsed`, JSON.stringify(false));
+          // document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
+          //   false
+          // )}`;
         }}
         className={cn(
           isCollapsed && "min-w-[50px] md:min-w-[70px] transition-all duration-300 ease-in-out"

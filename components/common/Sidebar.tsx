@@ -11,7 +11,7 @@ import {
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import UploadBondPage from "./UploadBondPage";
+import UploadBondPage from "../alm/uploads/UploadBondPage";
 import { Button } from "../ui/button";
 import ChatContainer from "../chat/chat-container";
 

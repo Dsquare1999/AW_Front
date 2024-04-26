@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import UploadBond from "./UploadBond";
-import { Button } from "../ui/button";
-import { DispalyTable } from "../utils/datatable/DisplayTable";
+import { Button } from "../../ui/button";
+import { DispalyTable } from "../../utils/datatable/DisplayTable";
 
 import axios from "axios";
 
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
 
 import {
   useBondMutation,

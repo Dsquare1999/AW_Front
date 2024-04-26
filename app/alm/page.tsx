@@ -6,8 +6,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import UploadBond from "@/components/common/UploadBond";
-import UploadBondPage from "@/components/common/UploadBondPage";
+import UploadBond from "@/components/alm/uploads/UploadBond";
+import UploadBondPage from "@/components/alm/uploads/UploadBondPage";
 import styles from "@/components/styles/alm.module.css";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -16,12 +16,13 @@ import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 
 import { useRetrieveBilanQuery } from "@/redux/features/retrieveApiSlice";
-import BondPortofolioPage from "@/components/common/BondPortofolioPage";
-import { CashflowData } from "@/data/CashflowsData";
+import BondPortofolioPage from "@/components/alm/bonds/pages/BondPortofolioPage";
+import { CashflowData } from "@/data/bonds/CashflowsData";
 import { BondProp } from "../types/BondType";
-import DisplayBondPortofolio from "@/components/common/DisplayBondPortofolio";
-import BilanPage from "@/components/common/BilanPage";
+import DisplayBondPortofolio from "@/components/alm/bonds/pages/DisplayBondPortofolio";
+import BilanPage from "@/components/alm/bonds/pages/BilanPage";
 import Sidebar from "@/components/common/Sidebar";
+import ChatContainer from "@/components/chat/chat-container";
 
 const ALMPage = () => {
   // Authentication redirection
@@ -90,7 +91,18 @@ const ALMPage = () => {
           </ResizablePanelGroup>
         </div>
         <section className="">
-            <BilanPage />
+        <ResizablePanelGroup
+            direction="vertical"
+            className="min-h-[90vh] w-full rounded-lg border p-2"
+          >
+            <ResizablePanel defaultSize={50}>
+              <BilanPage />
+            </ResizablePanel>
+            <ResizableHandle withHandle className="my-4" />
+            <ResizablePanel defaultSize={25}>
+              <ChatContainer />
+            </ResizablePanel>
+          </ResizablePanelGroup>
         </section>
       </main>
     </div>

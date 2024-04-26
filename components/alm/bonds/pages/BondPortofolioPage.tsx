@@ -1,5 +1,5 @@
 "use client";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../../ui/separator";
 import {
   Accordion,
   AccordionContent,
@@ -17,18 +17,18 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { CaretSortIcon } from "@radix-ui/react-icons";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../../../ui/scroll-area";
 
-import { Button } from "../ui/button";
-import Section from "./Section";
+import { Button } from "../../../ui/button";
+import Section from "../../../common/Section";
 
 import { CashflowProp, BondProp } from "@/app/types/BondType";
-import CashflowView from "../alm/bonds/CashflowView";
-import BondsHeader from "../alm/bonds/BondsHeader";
-import BondRow from "../alm/bonds/BondRow";
-import ValorisationView from "../alm/bonds/ValorisationView";
-import DurationView from "../alm/bonds/DurationView";
-import EconomicValueView from "../alm/bonds/EcomicValueView";
+import CashflowView from "../CashflowView";
+import BondsHeader from "../BondsHeader";
+import BondRow from "../BondRow";
+import ValorisationView from "../ValorisationView";
+import DurationView from "../DurationView";
+import EconomicValueView from "../EcomicValueView";
 import { useState } from "react";
 
 interface BondPortofolioPageProps {
