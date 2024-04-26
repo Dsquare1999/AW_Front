@@ -1,5 +1,5 @@
 import { OutstandingData } from "@/data/bonds/OutstandingData";
-import { Bar, Chart, Doughnut, Pie, Radar, Table } from "../charts";
+import { Bar, Chart, Doughnut, Pie, Radar, Table } from "../../../charts";
 import {
   Menubar,
   MenubarContent,
