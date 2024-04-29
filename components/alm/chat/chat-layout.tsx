@@ -59,9 +59,6 @@ export function ChatLayout({
         onExpand={() => {
           setIsCollapsed(false);
           Cookies.set(`react-resizable-panels:collapsed`, JSON.stringify(false));
-          // document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
-          //   false
-          // )}`;
         }}
         className={cn(
           isCollapsed && "min-w-[50px] md:min-w-[70px] transition-all duration-300 ease-in-out"

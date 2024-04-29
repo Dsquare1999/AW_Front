@@ -22,7 +22,9 @@ import { BondProp } from "../types/BondType";
 import DisplayBondPortofolio from "@/components/alm/bonds/pages/DisplayBondPortofolio";
 import BilanPage from "@/components/alm/bonds/pages/BilanPage";
 import Sidebar from "@/components/common/Sidebar";
-import ChatContainer from "@/components/chat/chat-container";
+import ChatContainer from "@/components/alm/chat/chat-container";
+import SpreadPage from "@/components/alm/spreads/pages/SpreadPage";
+import SwapPage from "@/components/alm/swaps/pages/SwapPage";
 
 const ALMPage = () => {
   // Authentication redirection
@@ -75,8 +77,8 @@ const ALMPage = () => {
         <AuthNavBar />
       </div>
       <main className="h-[100vh] overflow-hidden flex space-x-2 justify-items-center border pt-5">
-        <Sidebar  />
-        <div className="flex flex-col">
+        <Sidebar />
+        <section className="flex flex-col">
           <ResizablePanelGroup
             direction="vertical"
             className="min-h-[90vh] w-full rounded-lg border p-2"
@@ -89,9 +91,23 @@ const ALMPage = () => {
               <DisplayBondPortofolio bonds={bonds} />
             </ResizablePanel>
           </ResizablePanelGroup>
-        </div>
+        </section>
         <section className="">
-        <ResizablePanelGroup
+          <ResizablePanelGroup
+            direction="vertical"
+            className="min-h-[90vh] w-full rounded-lg border p-2"
+          >
+            <ResizablePanel defaultSize={50}>
+              <SpreadPage />
+            </ResizablePanel>
+            <ResizableHandle withHandle className="my-4" />
+            <ResizablePanel defaultSize={25}>
+              <SwapPage />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </section>
+        <section className="">
+          <ResizablePanelGroup
             direction="vertical"
             className="min-h-[90vh] w-full rounded-lg border p-2"
           >

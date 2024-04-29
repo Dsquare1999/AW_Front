@@ -429,10 +429,10 @@ export default function UploadBond({
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel className="font-bold text-center underline text-lg text-black">
+                    <FormLabel className="font-bold text-center underline text-md text-black">
                       {title ? title : "Upload Portofolios"}
                     </FormLabel>
-                    <p className="text-sm text-black">
+                    <p className="text-xs text-black">
                       Drag & Drop files or{" "}
                       <span
                         className="font-bold text-blue-600 cursor-pointer"
@@ -442,7 +442,7 @@ export default function UploadBond({
                       </span>{" "}
                       to upload
                     </p>
-                    <p className="text-xs text-black">Allowed files: xlsx</p>
+                    <p className="text-[9px] text-black">Allowed files: xlsx</p>
                     <FormControl>
                       <input
                         placeholder="fileInput"

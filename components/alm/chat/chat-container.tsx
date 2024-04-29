@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { ChatLayout } from "@/components/chat/chat-layout";
+import { ChatLayout } from "@/components/alm/chat/chat-layout";
 
 
 const layout = Cookies.get(`react-resizable-panels:layout`);

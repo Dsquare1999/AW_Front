@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
   TooltipProvider,
 } from "@/components/ui/tooltip";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarImage } from "../../ui/avatar";
 import { Message } from "@/data/chats";
 
 interface SidebarProps {
