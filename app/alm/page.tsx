@@ -6,18 +6,15 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import UploadBond from "@/components/alm/uploads/UploadBond";
-import UploadBondPage from "@/components/alm/uploads/UploadBondPage";
+
 import styles from "@/components/styles/alm.module.css";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 
-import { useRetrieveBilanQuery } from "@/redux/features/retrieveApiSlice";
+import { useRetrieveBilanQuery, useRetrieveSpreadOperationsQuery } from "@/redux/features/retrieveApiSlice";
 import BondPortofolioPage from "@/components/alm/bonds/pages/BondPortofolioPage";
-import { CashflowData } from "@/data/bonds/CashflowsData";
 import { BondProp } from "../types/BondType";
 import DisplayBondPortofolio from "@/components/alm/bonds/pages/DisplayBondPortofolio";
 import BilanPage from "@/components/alm/bonds/pages/BilanPage";
@@ -25,6 +22,7 @@ import Sidebar from "@/components/common/Sidebar";
 import ChatContainer from "@/components/alm/chat/chat-container";
 import SpreadPage from "@/components/alm/spreads/pages/SpreadPage";
 import SwapPage from "@/components/alm/swaps/pages/SwapPage";
+import { SpreadType } from "../types/SpreadType";
 
 const ALMPage = () => {
   // Authentication redirection
@@ -45,6 +43,14 @@ const ALMPage = () => {
     isFetching: isBondFetching,
   } = useRetrieveBilanQuery();
 
+  const [spreads, setSpreads] = useState<SpreadType[]>([]);
+  const {
+    data: mySpreads,
+    isLoading: isSpreadLoading,
+    isFetching: isSpreadFetching,
+  } = useRetrieveSpreadOperationsQuery();
+  
+
   useEffect(() => {
     if (
       myBilan &&
@@ -55,11 +61,18 @@ const ALMPage = () => {
     ) {
       const myBonds = myBilan[0].bondPortofolios[0].bonds;
       setBonds(myBonds);
-      console.log("My bonds");
+      console.log("My bonds", myBonds);
     } else {
       console.log("No Bond found !");
     }
-  }, [myBilan]);
+
+    if (mySpreads && mySpreads.length > 0) {
+      console.log("My spreads", mySpreads);
+      // setSpreads(mySpreads);
+    } else {
+      console.log("No Spread found !");
+    }
+  }, [myBilan, mySpreads]);
 
 
   return (
@@ -98,7 +111,7 @@ const ALMPage = () => {
             className="min-h-[90vh] w-full rounded-lg border p-2"
           >
             <ResizablePanel defaultSize={50}>
-              <SpreadPage />
+              <SpreadPage spreads={spreads} />
             </ResizablePanel>
             <ResizableHandle withHandle className="my-4" />
             <ResizablePanel defaultSize={25}>
