@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { da } from "@faker-js/faker";
 
 interface dataProps {
   labels: string[];

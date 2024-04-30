@@ -52,7 +52,7 @@ export default function App({
                 position: "top" as const,
             },
             title: {
-                display: true,
+                display: false,
                 text: title,
             },
         },

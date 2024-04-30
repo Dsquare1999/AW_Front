@@ -31,18 +31,20 @@ interface dataProps {
   }[];
 }
 
-export default function App({data, title}: {data: dataProps, title: string}) {
+export default function App({data, title, labelPosition}: {data: dataProps, title: string, labelPosition?:'right'|'left'|'bottom'|'top'}) {
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: labelPosition ? labelPosition : undefined,
+        display: labelPosition ? true : false,
       },
       title: {
-        display: true,
+        display: false,
         text: title,
       },
     },
+    
   };
   return <Bar options={options} data={data} />;
 }

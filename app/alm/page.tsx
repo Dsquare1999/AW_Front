@@ -68,7 +68,7 @@ const ALMPage = () => {
 
     if (mySpreads && mySpreads.length > 0) {
       console.log("My spreads", mySpreads);
-      // setSpreads(mySpreads);
+      setSpreads(mySpreads);
     } else {
       console.log("No Spread found !");
     }

@@ -368,15 +368,15 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
         }}
       >
         <PopoverTrigger asChild>
-          <Button size={'lg'} variant="outline">
+          <Button size={'sm'} variant="outline">
             <VscCalendar className='w-4 h-4 mr-2' />
-            <div className="text-right text-xs">
+            <div className="text-right text-[8px]">
               <div className="py-1">
                 <div>{`${formatDate(range.from, locale)}${range.to != null ? ' - ' + formatDate(range.to, locale) : ''
                   }`}</div>
               </div>
               {rangeCompare != null && (
-                <div className="opacity-60 text-[10px] -mt-1">
+                <div className="opacity-60 text-[6px] -mt-1">
                   <>
                     vs. {formatDate(rangeCompare.from, locale)}
                     {rangeCompare.to != null
@@ -386,7 +386,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                 </div>
               )}
             </div>
-            <div className="pl-1 opacity-60 -mr-2 scale-125">
+            <div className="opacity-60 -mr-2 scale-90">
               {isOpen ? (<ChevronUpIcon width={24} />) : (<ChevronDownIcon width={24} />)}
             </div>
           </Button>

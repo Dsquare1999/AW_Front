@@ -1,5 +1,6 @@
 "use client";
-import { Separator } from "../../../ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import {
   Accordion,
   AccordionContent,
@@ -12,12 +13,14 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
 import { CaretSortIcon } from "@radix-ui/react-icons";
-import { ScrollArea, ScrollBar } from "../../../ui/scroll-area";
 
 import { Button } from "../../../ui/button";
 import Section from "../../../common/Section";
@@ -30,63 +33,106 @@ import ValorisationView from "../ValorisationView";
 import DurationView from "../DurationView";
 import EconomicValueView from "../EcomicValueView";
 import { useState } from "react";
+import clsx from "clsx";
 
 interface BondPortofolioPageProps {
   bonds: BondProp[];
 }
 
 const BondAccordionContent = ({ bond }: { bond: BondProp }) => (
-  <div className="flex flex-col space-y-4">
-    <div className="w-full flex space-x-4">
-      <div className="flex-1">
-        <CashflowView
-          cashflows={bond.cashflows}
+  <Carousel className="max-w-[490px]">
+    <CarouselContent>
+      <CarouselItem>
+        <div className="w-full flex space-x-2">
+          <CashflowView
+            cashflows={bond.cashflows}
+            due_date={bond.due_date}
+            value_date={bond.value_date}
+          />
+          <ValorisationView
+            valorisations={bond.valorisations}
+            due_date={bond.due_date}
+            value_date={bond.value_date}
+          />
+        </div>
+      </CarouselItem>
+      <CarouselItem>
+        <DurationView
+          durations={bond.duration_macaulay}
           due_date={bond.due_date}
           value_date={bond.value_date}
         />
-      </div>
-      <div className="flex-1">
-        <ValorisationView
-          valorisations={bond.valorisations}
+      </CarouselItem>
+      <CarouselItem>
+        <EconomicValueView
+          economicValues={bond.valorisations}
           due_date={bond.due_date}
           value_date={bond.value_date}
         />
-      </div>
-    </div>
-    <DurationView
-      durations={bond.duration_macaulay}
-      due_date={bond.due_date}
-      value_date={bond.value_date}
-    />
-    <EconomicValueView
-      economicValues={bond.valorisations}
-      due_date={bond.due_date}
-      value_date={bond.value_date}
-    />
-  </div>
+      </CarouselItem>
+    </CarouselContent>
+    <CarouselPrevious />
+    <CarouselNext />
+  </Carousel>
 );
 
 const BondPortofolioPage = ({ bonds }: BondPortofolioPageProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [choosenBond, setChoosenBond] = useState<BondProp | null>(null);
   return (
     <Section
       title="Bonds"
       description="Find all your portofolio bonds here ..."
     >
-      <BondsHeader />
-      <Separator className="my-2" />
-      <Accordion type="single" collapsible defaultValue="Bond 1">
-        {bonds.map((bond, index) => (
-          <AccordionItem value={`Bond ${index + 1}`} key={index}>
-            <AccordionTrigger>
-              <BondRow bond={bond} />
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col space-y-4">
-              <BondAccordionContent bond={bond} />
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <div className="w-full class-test">
+        <div className="flex">
+          <ScrollArea className="h-72 w-24 rounded-md border">
+            <div className="p-1">
+              <h4 className="mb-4 text-xs font-medium leading-none">Isin</h4>
+              {bonds.map((bond, index) => (
+                <>
+                  <div
+                    key={index}
+                    className={clsx(`text-[9px] cursor-pointer py-1`, bond === choosenBond && "bg-foreground/10")}
+                    onClick={() => setChoosenBond(bond)}
+                  >
+                    {bond.isin}
+                  </div>
+                  <Separator className="my-2" />
+                </>
+              ))}
+              {bonds.map((bond, index) => (
+                <>
+                  <div
+                    key={index}
+                    className={clsx(`text-[9px] cursor-pointer py-1`, bond === choosenBond && "bg-foreground/10")}
+                    onClick={() => setChoosenBond(bond)}
+                  >
+                    {bond.isin}
+                  </div>
+                  <Separator className="my-2" />
+                </>
+              ))}
+            </div>
+          </ScrollArea>
+          <div>
+            <BondsHeader />
+            <Separator className="my-2" />
+            <Accordion type="single" collapsible defaultValue="Selected Bond">
+              {choosenBond && (
+                <AccordionItem value={`Selected Bond`}>
+                  <AccordionTrigger>
+                    <BondRow bond={choosenBond} />
+                  </AccordionTrigger>
+                  <AccordionContent className="flex flex-col space-y-4">
+                    <BondAccordionContent bond={choosenBond} />
+                  </AccordionContent>
+                </AccordionItem>
+              )}
+            </Accordion>
+          </div>
+        </div>
+      </div>
     </Section>
   );
 };

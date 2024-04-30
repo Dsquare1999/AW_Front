@@ -21,7 +21,7 @@ export default function App({data, title}: {data: dataProps, title: string}) {
         position: 'top' as const,
       },
       title: {
-        display: true,
+        display: false,
         text: title,
       },
     },
