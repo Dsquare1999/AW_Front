@@ -6,3 +6,5 @@ export { default as Line } from './Line'
 export { default as Pie } from './Pie'
 export { default as Radar } from './Radar'
 export { default as Table } from './Table'
+
+export type { dataProps as BarProps} from './Bar'

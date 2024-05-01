@@ -1,0 +1,105 @@
+export const rows = [
+  {
+    key: 1,
+    date: "05/14/24",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 2,
+    date: "05/14/25",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 3,
+    date: "05/14/26",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 4,
+    date: "05/14/27",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 5,
+    date: "05/14/28",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 6,
+    date: "05/14/29",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 7,
+    date: "05/14/30",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 8,
+    date: "05/14/31",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 9,
+    date: "05/14/32",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+  {
+    key: 10,
+    date: "05/14/33",
+    beginningBalance: 10000,
+    coupon: 599.0,
+    redempt: 1250,
+    endingBalance: 10000,
+  },
+];
+
+export const headers = [
+  {
+    key: "date",
+    label: "Date",
+  },
+  {
+    key: "beginningBalance",
+    label: "Beginning Balance",
+  },
+  {
+    key: "coupon",
+    label: "Coupon",
+  },
+  {
+    key: "redempt",
+    label: "Redempt",
+  },
+  {
+    key: "endingBalance",
+    label: "Ending Balance",
+  },
+];

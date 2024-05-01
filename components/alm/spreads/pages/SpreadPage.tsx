@@ -11,6 +11,7 @@ import {
   } from "@/components/ui/accordion";
 import { Separator } from "../../../ui/separator";
 import SpreadRow from "../SpreadRow";
+import EmissionPage from "../../primaryMarket/pages/EmissionPage";
 
 interface SpreadPageProps {
     spreads: SpreadType[]
@@ -27,7 +28,7 @@ const SpreadPage = ({spreads} : SpreadPageProps) => {
                     <SpreadRow spread={spread} />
                     </AccordionTrigger>
                     <AccordionContent className="flex flex-col space-y-4">
-                    Voici le detail de spread 
+                        <EmissionPage />
                     </AccordionContent>
                 </AccordionItem>
                 ))}

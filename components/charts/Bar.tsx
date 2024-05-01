@@ -22,12 +22,12 @@ ChartJS.register(
 );
 
 
-interface dataProps {
+export type dataProps = {
   labels: string[];
   datasets: {
       label: string;
       data: number[];
-      backgroundColor: string;
+      backgroundColor: string | string[]
   }[];
 }
 
@@ -44,7 +44,7 @@ export default function App({data, title, labelPosition}: {data: dataProps, titl
         text: title,
       },
     },
-    
+    maintainAspectRatio: false
   };
   return <Bar options={options} data={data} />;
 }
