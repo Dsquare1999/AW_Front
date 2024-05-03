@@ -23,7 +23,7 @@ const Section = ({title = "Title", description, children} : SectionProps) => {
 
     return ( 
         <Card>
-            <CardHeader>
+            <CardHeader className="pb-2">
                 <CardTitle className="text-algoMarron dark:text-algoOrange">{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>

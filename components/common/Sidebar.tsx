@@ -17,7 +17,7 @@ import ChatContainer from "../alm/chat/chat-container";
 
 const Sidebar = () => {
   return (
-    <div className="flex flex-col items-center w-40 h-full overflow-hidden text-gray-400 bg-gray-900 rounded">
+    <div className="flex flex-col items-center w-32 h-full overflow-hidden text-gray-400 bg-gray-900 rounded">
       <a className="flex items-center w-full px-3 mt-3" href="#">
         <svg
           className="w-8 h-8 fill-current xs:hidden sm:flex"

@@ -24,12 +24,12 @@ const InfoTable : React.FC<TableType> = ({rows, headers}) => {
         ))}
       </div>
       <Separator className="my-1" />
-      <ScrollArea className="h-[150px] w-full border px-4">
+      <ScrollArea className="h-[125px] w-full border px-2">
         <ul>
           {rows.map((row, index) => (
             <li
               key={row.key}
-              className={`flex justify-between items-center text-[10px] px-2 ${index % 2 === 0 ? "bg-foreground/0" : "bg-foreground/5"}`}
+              className={`flex justify-between items-center text-[8px] px-2 ${index % 2 === 0 ? "bg-foreground/0" : "bg-foreground/5"}`}
             >
                 {
                     headers.map((header, headerIndex) => (

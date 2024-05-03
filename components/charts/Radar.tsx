@@ -19,27 +19,38 @@ ChartJS.register(
   Legend
 );
 
-interface dataProps {
+export type dataProps = {
   labels: string[];
   datasets: {
       label: string;
       data: number[];
-      backgroundColor: string[];
+      backgroundColor: string | string[];
   }[];
 }
 
-export default function App({data, title}: {data: dataProps, title: string}) {
+export default function App({data, title, labelPosition}: {data: dataProps, title: string, labelPosition?:'right'|'left'|'bottom'|'top'}) {
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: labelPosition ? labelPosition : undefined,
+        display: labelPosition ? true : false,
       },
       title: {
         display: false,
         text: title,
       },
     },
+    scales: {
+      r: {
+        pointLabels: {
+          font: {
+            size: 7
+          }
+        }
+      }
+    },
+    maintainAspectRatio: false
   };
   return <Radar options={options} data={data} />;
 }

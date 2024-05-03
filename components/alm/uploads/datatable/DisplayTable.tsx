@@ -5,8 +5,8 @@ import {
     TabsTrigger,
   } from "@/components/ui/tabs"
 import { useState } from "react"
-import { DataTable } from "./dataTable"
-import { Columns } from "./column"
+import { DataTable } from "./DataTable"
+import { Columns } from "./Column"
 import { AdminBondFieldName } from "@/schemas/AdminBondSchema";
 import { BondFields } from "@/data/fields/bondFields"
 
@@ -88,7 +88,6 @@ export const DispalyTable = ({FilesDataTables, RejectedFilesDataTables, endpoint
                 error: "Facial rate is missing"
             };
         }
-    
         if (isNaN(row.facial_rate)) {
           return {
             status: false,

@@ -29,9 +29,9 @@ import { FaDeleteLeft } from "react-icons/fa6";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Columns } from "../../utils/datatable/column";
-import { DataTable } from "../../utils/datatable/dataTable";
-import { HeaderProps } from "../../utils/datatable/column";
+import { Columns } from "./datatable/Column";
+import { DataTable } from "./datatable/DataTable";
+import { HeaderProps } from "./datatable/Column";
 
 import axios from "axios";
 

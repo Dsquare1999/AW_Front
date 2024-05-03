@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,8 +8,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -21,17 +21,26 @@ ChartJS.register(
   Legend
 );
 
-
-interface dataProps {
+export type dataProps = {
   labels: string[];
   datasets: {
-      label: string;
-      data: number[];
-      backgroundColor: string;
+    fill?: boolean;
+    label: string;
+    data: number[];
+    borderColor?: string | string[]
+    backgroundColor: string | string[];
   }[];
-}
+};
 
-export default function App({data, title, labelPosition}: {data: dataProps, title: string, labelPosition?:'right'|'left'|'bottom'|'top'}) {
+export default function App({
+  data,
+  title,
+  labelPosition,
+}: {
+  data: dataProps;
+  title: string;
+  labelPosition?: "right" | "left" | "bottom" | "top";
+}) {
   const options = {
     responsive: true,
     plugins: {
@@ -44,6 +53,7 @@ export default function App({data, title, labelPosition}: {data: dataProps, titl
         text: title,
       },
     },
+    maintainAspectRatio: false
   };
   return <Line options={options} data={data} />;
 }

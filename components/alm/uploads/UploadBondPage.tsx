@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import UploadBond from "./UploadBond";
 import { Button } from "../../ui/button";
-import { DispalyTable } from "../../utils/datatable/DisplayTable";
+import { DispalyTable } from "./datatable/DisplayTable";
 
 import axios from "axios";
 

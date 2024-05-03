@@ -14,7 +14,6 @@ const BondRow: React.FunctionComponent<BondRowProps> = ({bond} : BondRowProps) =
             <li className="flex-1 text-center">{bond.refund}</li>
             <li className="flex-1 text-center">{bond.period}</li>
             <li className="flex-1 text-center">{bond.type}</li>
-
         </ul>
      );
 }

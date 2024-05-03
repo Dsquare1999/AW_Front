@@ -4,11 +4,13 @@ export type PropositionType = {
     accepted_date: string | null;
     confirmation : boolean;
     confirmation_date: string | null;
+    created_at: string;
     id : string;
     operation: string;
     price: number;
     proposer: 1;
     status: string;
+    updated_at: string;
     volume: number;
 }
 

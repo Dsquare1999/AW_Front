@@ -84,7 +84,7 @@ const BondPortofolioPage = ({ bonds }: BondPortofolioPageProps) => {
       title="Bonds"
       description="Find all your portofolio bonds here ..."
     >
-      <div className="w-full class-test">
+      <div className="w-full">
         <div className="flex">
           <ScrollArea className="h-72 w-24 rounded-md border">
             <div className="p-1">
@@ -96,7 +96,10 @@ const BondPortofolioPage = ({ bonds }: BondPortofolioPageProps) => {
                     className={clsx(`text-[9px] cursor-pointer py-1`, bond === choosenBond && "bg-foreground/10")}
                     onClick={() => setChoosenBond(bond)}
                   >
-                    {bond.isin}
+                    <span className="block">{bond.isin} </span>
+                    <span> {bond.refund}</span>
+                    <span> {bond.type}</span>
+                    <span> {bond.facial_rate*100}%</span>
                   </div>
                   <Separator className="my-2" />
                 </>

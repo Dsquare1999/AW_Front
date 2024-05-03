@@ -26,9 +26,9 @@ const EmissionPage = () => {
         align: "start",
       }}
       orientation="vertical"
-      className="w-full"
+      className="w-[350px]"
     >
-      <CarouselContent className="h-[250px]">
+      <CarouselContent className="h-[200px]">
         <CarouselItem>
           <Maturity />
         </CarouselItem>
@@ -39,8 +39,6 @@ const EmissionPage = () => {
           <InfoTable headers={detailsHeaders} rows={detailsRows} />
         </CarouselItem>
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
       
     </Carousel>
   );

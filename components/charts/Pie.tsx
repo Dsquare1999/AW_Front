@@ -4,7 +4,7 @@ import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface dataProps {
+export type dataProps = {
   labels: string[];
   datasets: {
       label: string;
@@ -13,18 +13,21 @@ interface dataProps {
   }[];
 }
 
-export default function App({data, title}: {data: dataProps, title: string}) {
+export default function App({data, title, labelPosition}: {data: dataProps, title: string, labelPosition?:'right'|'left'|'bottom'|'top'}) {
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: labelPosition ? labelPosition : undefined,
+        display: labelPosition ? true : false,
       },
       title: {
         display: false,
         text: title,
       },
     },
+    maintainAspectRatio: false
+    
   };
-  return <Pie options={options} data={data} />;
+  return <Pie options={options} data={data}  />;
 }
