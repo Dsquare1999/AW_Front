@@ -43,3 +43,4 @@ export const VerifySchema =  z.object({
 export { default as BondSchema} from './BondSchema'
 export { default as AdminBondSchema } from './AdminBondSchema'
 export { default as SpreadSchema } from './SpreadSchema'
+export { default as SwapSchema } from './SwapSchema'

@@ -496,7 +496,7 @@ export const CountrySelected = ({ country }: { country: string }) => {
     <div className="">
       {country && (
         <Image
-          src={`/img/countries/${country}.svg`}
+          src={`assets/image/countries/${country}.svg`}
           width={32}
           height={32}
           alt="Africa Country"

@@ -90,31 +90,19 @@ const BondPortofolioPage = ({ bonds }: BondPortofolioPageProps) => {
             <div className="p-1">
               <h4 className="mb-4 text-xs font-medium leading-none">Isin</h4>
               {bonds.map((bond, index) => (
-                <>
+                <div key={bond.id}>
                   <div
-                    key={index}
+                    
                     className={clsx(`text-[9px] cursor-pointer py-1`, bond === choosenBond && "bg-foreground/10")}
                     onClick={() => setChoosenBond(bond)}
                   >
-                    <span className="block">{bond.isin} </span>
+                    <span className="block">{bond.admin_bond.isin} </span>
                     <span> {bond.refund}</span>
                     <span> {bond.type}</span>
                     <span> {bond.facial_rate*100}%</span>
                   </div>
                   <Separator className="my-2" />
-                </>
-              ))}
-              {bonds.map((bond, index) => (
-                <>
-                  <div
-                    key={index}
-                    className={clsx(`text-[9px] cursor-pointer py-1`, bond === choosenBond && "bg-foreground/10")}
-                    onClick={() => setChoosenBond(bond)}
-                  >
-                    {bond.isin}
-                  </div>
-                  <Separator className="my-2" />
-                </>
+                </div>
               ))}
             </div>
           </ScrollArea>

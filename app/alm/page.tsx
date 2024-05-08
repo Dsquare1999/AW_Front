@@ -96,11 +96,11 @@ const ALMPage = () => {
             direction="vertical"
             className="min-h-[90vh] w-full rounded-lg border p-2"
           >
-            <ResizablePanel defaultSize={75}>
+            <ResizablePanel defaultSize={48}>
               <BondPortofolioPage bonds={bonds} />
             </ResizablePanel>
             <ResizableHandle withHandle className="my-4" />
-            <ResizablePanel defaultSize={25}>
+            <ResizablePanel defaultSize={48}>
               <DisplayBondPortofolio bonds={bonds} />
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -110,11 +110,11 @@ const ALMPage = () => {
             direction="vertical"
             className="min-h-[90vh] w-full rounded-lg border p-2"
           >
-            <ResizablePanel defaultSize={50}>
+            <ResizablePanel defaultSize={48}>
               <SpreadPage spreads={spreads} />
             </ResizablePanel>
             <ResizableHandle withHandle className="my-4" />
-            <ResizablePanel defaultSize={25}>
+            <ResizablePanel defaultSize={48}>
               <SwapPage />
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -124,11 +124,11 @@ const ALMPage = () => {
             direction="vertical"
             className="min-h-[90vh] w-full rounded-lg border p-2"
           >
-            <ResizablePanel defaultSize={50}>
+            <ResizablePanel defaultSize={48}>
               <BilanPage />
             </ResizablePanel>
             <ResizableHandle withHandle className="my-4" />
-            <ResizablePanel defaultSize={25}>
+            <ResizablePanel defaultSize={48}>
               <ChatContainer />
             </ResizablePanel>
           </ResizablePanelGroup>

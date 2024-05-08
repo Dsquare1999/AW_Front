@@ -9,6 +9,7 @@ const uploadApiSlice = apiSlice.injectEndpoints({
             query: ({
                         isin,
                         space,
+                        country,
                         description,
                         entity,
                         due_date,
@@ -21,7 +22,7 @@ const uploadApiSlice = apiSlice.injectEndpoints({
                         period } : z.infer<typeof AdminBondSchema>) => ({
                 url : '/backoffice/',
                 method: 'POST',
-                body : {isin, space, description, entity, due_date, facial_rate, refund, differed, guarantee, total_number, type, period}
+                body : {isin, space, country, description, entity, due_date, facial_rate, refund, differed, guarantee, total_number, type, period}
             })
         }),
 		bond: builder.mutation({

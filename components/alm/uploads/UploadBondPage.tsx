@@ -118,7 +118,7 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
             }
 
             sheet.rows.map(async (row) => {
-              await upload(endpoint as endpointProps, row);
+              await upload(submitEndpoint as endpointProps, row);
             });
           } catch (error) {
             console.log("Something went wrong here ... : ", error);

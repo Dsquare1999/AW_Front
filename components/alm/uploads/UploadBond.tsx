@@ -36,14 +36,8 @@ import { HeaderProps } from "./datatable/Column";
 import axios from "axios";
 
 import { AdminBondFieldName } from "@/schemas/AdminBondSchema";
-import { BondFields } from "@/data/fields/bondFields";
+import { BondFields, Isins } from "@/data/fields/bondFields";
 
-interface SelectField {
-  name: AdminBondFieldName;
-  type: "select";
-  placeholder: string;
-  options: string[];
-}
 
 interface RowData {
   rowId: string;
@@ -103,6 +97,7 @@ export default function UploadBond({
   >([]);
 
   const acceptedSheetNames: string[] = [
+    "backoffice",
     "bond",
     "dat",
     "dav",
@@ -187,17 +182,9 @@ export default function UploadBond({
     }
   };
 
-  let isinField: SelectField;
-
-  BondFields.map((field) => {
-    if (field.name == "isin") {
-      isinField = field as SelectField;
-    }
-  });
-
   const isValidRow = (row: RowData): { status: boolean; error: string } => {
     // isin checking
-    if (!isAdmin && !isinField.options.includes(row.isin)) {
+    if (!isAdmin && !Isins.includes(row.isin)) {
       return {
         status: false,
         error: "Unknown Bond isin",
@@ -295,8 +282,7 @@ export default function UploadBond({
               });
             } else {
               if (isSheetNameAccepted(workSheetName).status) {
-                const endpoint =
-                  isSheetNameAccepted(workSheetName).acceptedSheetName;
+                const endpoint = isSheetNameAccepted(workSheetName).acceptedSheetName;
 
                 thisSheetRows.forEach((row) => {
                   if (!isValidRow(row).status) {

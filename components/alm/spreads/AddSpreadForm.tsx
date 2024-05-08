@@ -18,231 +18,283 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CountrySelected } from "./africa";
 
-import * as Slider from "@radix-ui/react-slider";
+import { Slider } from "@/components/ui/slider-range";
 import { SpreadSchema } from "@/schemas";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+
+import { BondIsins } from "@/data/fields/bondFields";
+import { calculateExpirationDate } from "@/schemas/SpreadSchema";
+
+import { useCreateSpreadMutation } from "@/redux/features/createApiSlice";
+import { spread } from "lodash";
+import { toast } from "react-toastify";
 
 interface AddSpreadFormProps {
   countrySelected: string;
 }
 
 const AddSpreadForm: React.FC<AddSpreadFormProps> = ({ countrySelected }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedOperation, setSelectedOperation] = useState<string>("");
-  const [selectedType, setSelectedType] = useState<string>("");
+  const [createSpread, { isLoading }] = useCreateSpreadMutation();
 
+  const [localValues, setLocalValues] = useState([0, 100_000]);
   const form = useForm<z.infer<typeof SpreadSchema>>({
     resolver: zodResolver(SpreadSchema),
+    defaultValues: {
+      bid: 10000,
+      ask: 30000,
+      spread: 20000,
+    }
   });
+
+  const handleValueChange = (newValues: number[]) => {
+    const updatedValues = {
+      ...form.getValues(),
+      bid: newValues[0],
+      ask: newValues[1],
+      spread: newValues[1] - newValues[0],
+    };
+    form.reset(updatedValues);
+    setLocalValues(newValues);
+  };
+
+  const onSubmit = (values: any) => {
+    createSpread(values)
+      .unwrap()
+      .then((data) => {
+        toast.success('Spread Created');
+      })
+      .catch((error) => {
+        toast.error('Something went wrong ...');
+      });
+  };
 
   return (
     <div>
       <Form {...form}>
-        <div className="">
-          <div className="border-b border-gray-900/10 pb-2">
-            <div className="flex flex-col gap-y-4">
-              <div className="w-full flex items-center">
-                {countrySelected === "" ? (
-                  ""
-                ) : (
-                  <CountrySelected country={countrySelected} />
-                )}
-                <FormField
-                  control={form.control}
-                  name="admin_bond"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="m@example.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@google.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@support.com">
-                            m@support.com
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="">
+            <div className="">
+              <div className="flex flex-col gap-y-4">
+                <div className="w-full flex items-center">
+                  {countrySelected === "" ? (
+                    ""
+                  ) : (
+                    <div className="w-8">
+                      <CountrySelected country={countrySelected} />
+                    </div>
                   )}
-                />
-              </div>
-
-              <div className="w-full">
-                <div className="w-full flex justify-evenly items-center">
-                  <div className="flex items-center justify-center cursor-pointer">
-                    <input
-                      type="radio"
-                      id="buy"
-                      value="Buy"
-                      checked={selectedOperation === "Buy"}
-                    />
-                    <label htmlFor="buy">Buy</label>
-                  </div>
-                  <div className="flex items-center justify-center cursor-pointer">
-                    <input
-                      type="radio"
-                      id="sell"
-                      value="Sell"
-                      checked={selectedOperation === "Sell"}
-                    />
-                    <label htmlFor="sell">Sell</label>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full">
-                <div className="w-full flex flex-wrap items-center">
-                  <div className="flex items-center justify-center cursor-pointer w-[50%]">
-                    <input
-                      type="radio"
-                      id="minimum-volume-order"
-                      value="MinVol"
-                      checked={selectedType === "MinVol"}
-                    />
-                    <label htmlFor="minimum-volume-order">
-                      Minimum Volume Order
-                    </label>
-                  </div>
-                  <div className="flex items-center justify-center cursor-pointer  w-[50%]">
-                    <input
-                      type="radio"
-                      id="all-or-none-order"
-                      value="AllNone"
-                      checked={selectedType === "AllNone"}
-                    />
-                    <label htmlFor="all-or-none-order">All or None Order</label>
-                  </div>
-                  <div className="flex items-center justify-center cursor-pointer  w-[50%]">
-                    <input
-                      type="radio"
-                      id="volume-available-order"
-                      value="VolAvail"
-                      checked={selectedType === "VolAvail"}
-                    />
-                    <label htmlFor="volume-available-order">
-                      Volume Available Order
-                    </label>
-                  </div>
-                  <div className="flex items-center justify-center cursor-pointer  w-[50%]">
-                    <input
-                      type="radio"
-                      id="complex-order"
-                      value="ComplexOrder"
-                      checked={selectedType === "ComplexOrder"}
-                    />
-                    <label htmlFor="complex-order">Complex Order</label>
-                  </div>
-
                   <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel>Notify me about...</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex flex-col space-y-1"
-                >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="all" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      All new messages
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="mentions" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      Direct messages and mentions
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="none" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Nothing</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-                </div>
-              </div>
-              <div className="flex justify-between items-center gap-2 text-xs">
-              <FormField
                     control={form.control}
-                    name="quantity"
+                    name="admin_bond"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Two Factor Code</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            disabled={isLoading}
-                            placeholder="123456"
-                          />
-                        </FormControl>
+                      <FormItem className="w-full">
+                        <Select
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="text-[10px]">
+                              <SelectValue placeholder="Select a verified email to display" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {BondIsins.map((bondIsin) => (
+                              <SelectItem
+                                className="text-[10px]"
+                                key={bondIsin.id}
+                                value={bondIsin.id}
+                              >
+                                {bondIsin.isin}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                <FormField
+                </div>
+                <div className="w-full">
+                  <div className="flex items-center justify-center space-x-4">
+                    <FormField
+                      control={form.control}
+                      name="quantity"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="number"
+                              min={1}
+                              onChange={(e) =>
+                                field.onChange(parseInt(e.target.value))
+                              }
+                              disabled={isLoading}
+                              placeholder="Quantity"
+                              className="text-[10px]"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="type"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="flex justify-center items-center space-x-2"
+                            >
+                              <FormItem className="flex items-center space-x-1 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="B" />
+                                </FormControl>
+                                <FormLabel className="font-normal text-[10px] cursor-pointer">
+                                  Buy
+                                </FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-1 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="S" />
+                                </FormControl>
+                                <FormLabel className="font-normal text-[10px] cursor-pointer">
+                                  Sell
+                                </FormLabel>
+                              </FormItem>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex space-x-2">
+                  <FormField
+                    control={form.control}
+                    name="order"
+                    render={({ field }) => (
+                      <FormItem className="text-[10px] w-full">
+                        <Select
+                          onValueChange={field.onChange}
+                          
+                        >
+                          <FormControl>
+                            <SelectTrigger className="text-[10px]">
+                              <SelectValue placeholder="Order" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem
+                              className="text-[10px]"
+                              value={"MinVol"}
+                            >
+                              Minimum Volume Order
+                            </SelectItem>
+                            <SelectItem
+                              className="text-[10px]"
+                              value={"AllNone"}
+                            >
+                              All or None Order
+                            </SelectItem>
+                            <SelectItem
+                              className="text-[10px]"
+                              value={"VolAvail"}
+                            >
+                              Volume Available Order
+                            </SelectItem>
+                            <SelectItem
+                              className="text-[10px]"
+                              value={"Complex"}
+                            >
+                              Complex Order
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
                     control={form.control}
                     name="validity"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Two Factor Code</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            disabled={isLoading}
-                            placeholder="123456"
-                          />
-                        </FormControl>
+                      <FormItem className="text-[10px] w-full">
+                        <Select
+                          onValueChange={async (value) => {
+                            const expirationDate = await calculateExpirationDate(value);
+                            form.setValue("validity", expirationDate);
+                          }}
+                          
+                        >
+                          <FormControl>
+                            <SelectTrigger className="text-[10px]">
+                              <SelectValue placeholder="Validity" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem className="text-[10px]" value={"1"}>
+                              01 day
+                            </SelectItem>
+                            <SelectItem className="text-[10px]" value={"3"}>
+                              03 days
+                            </SelectItem>
+                            <SelectItem className="text-[10px]" value={"5"}>
+                              05 days
+                            </SelectItem>
+                            <SelectItem className="text-[10px]" value={"7"}>
+                              07 days
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                </div>
+                <div className="grid gap-4 p-4 w-full rounded-[12px]">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[10px] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Price Range
+                    </label>
+                    <aside className="flex items-center justify-center space-x-2">
+                      {localValues.map((_, index) => (
+                        <span key={index} className="text-[10px]">
+                          ${localValues[index]}
+                        </span>
+                      ))}
+                    </aside>
+                  </div>
+                  <Slider
+                    defaultValue={[10_000, 30_000]}
+                    minStepsBetweenThumbs={1_000}
+                    max={100_000}
+                    min={1}
+                    step={1}
+                    onValueChange={handleValueChange}
+                    className={cn("w-full cursor-pointer")}
+                  />
+                </div>
               </div>
-              <Slider.Root defaultValue={[50]} step={10}>
-                <Slider.Track>
-                  <Slider.Range />
-                </Slider.Track>
-                <Slider.Thumb />
-              </Slider.Root>
             </div>
           </div>
-        </div>
-        <div className="mt-2 flex items-center justify-end pr-2">
-          <Button disabled={isLoading} type="submit">
-            Add
-          </Button>
-        </div>
+          <div className="mt-2 flex items-center justify-end pr-2">
+            <Button disabled={isLoading} type="submit">
+              Add
+            </Button>
+          </div>
+        </form>
       </Form>
     </div>
   );

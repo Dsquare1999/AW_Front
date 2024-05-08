@@ -29,6 +29,7 @@ const AddAdminBondSchema = z.object({
     country: z.string().trim().min(1, {
       message: 'Bond Country is required'
     }), 
+    
     space: z.string().trim().min(1, {
       message: 'Bond Space is required'
     }), 
@@ -66,6 +67,7 @@ const AddAdminBondSchema = z.object({
     type: z.string().trim().min(1,{
       message : "Bond Type is required"
     }),
+    
     period: z.string().trim().min(1, {
       message: 'Bond Period is required'
     })

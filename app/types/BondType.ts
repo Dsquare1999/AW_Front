@@ -1,3 +1,5 @@
+import { AdminBondType } from "./AdminBondType"
+
 export type CashflowProp = {
     amortization: number
     cashflow: number
@@ -23,6 +25,7 @@ export type DurationProp = {
 
 export type BondProp = {
     id: string,
+    admin_bond: AdminBondType,
     annual_coupon: number,
     isin: string,
     outstanding: number,
