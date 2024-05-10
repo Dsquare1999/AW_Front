@@ -24,9 +24,15 @@ import SwapRow from "../SwapRow";
 import SwapPropositionPage from "./SwapPropositionPage";
 import clsx from "clsx";
 
+import { BondProp } from "@/app/types/BondType";
+import { SwapType } from "@/app/types/SwapType";
 
-const SwapPage = () => {
-  //   const [choosenSwap, setChoosenSwap] = React.useState<SwapType | null>(null);
+interface SwapPageProps {
+  bonds: BondProp[];
+  swaps: SwapType[];
+}
+const SwapPage = ({ bonds, swaps }: SwapPageProps) => {
+  const [choosenSwap, setChoosenSwap] = React.useState<SwapType | null>(null);
   const [hoveredSwap, setHoveredSwap] = React.useState<string | null>(null);
   const [addSwapTrigger, setAddSwapTrigger] = React.useState<boolean>(false);
   return (
@@ -66,39 +72,39 @@ const SwapPage = () => {
           </ToggleGroupItem>
         </ToggleGroup>
 
-        {/* <AddSwapForm /> */}
-        
+        {addSwapTrigger && (
+          <div>
+            <AddSwapForm myBonds={bonds} />
+          </div>
+        )}
+
         <div
           className="w-full p-2 relative"
           onMouseEnter={() => setHoveredSwap("swap")}
           onMouseLeave={() => setHoveredSwap(null)}
-        >
-  
-        </div>
+        ></div>
 
-        <div className="flex">
+        {!addSwapTrigger && (
+          <div className="flex">
             <ScrollArea className="h-72 w-24 rounded-md border">
               <div className="p-1">
                 <h4 className="mb-4 text-xs font-medium leading-none">Isin</h4>
-                {/* {spreads.map((spread) => ( */}
-                  {/* <div key={spread.id}> */}
+                {swaps.map((swap) => (
+                  <div key={swap.id}>
                     <div
                       className={clsx(
                         `text-[9px] cursor-pointer py-1`,
-                        // spread === choosenSpread && "bg-foreground/10"
+                        swap === choosenSwap && "bg-foreground/10"
                       )}
-                      // onClick={() => setChoosenSpread(spread)}
+                      onClick={() => setChoosenSwap(swap)}
                     >
-                      <span>
-                        Isin
-                        {/* {spread.admin_bond.isin}  */}
-                        </span>
+                      <span>{swap.offer_quantity}</span>
                       {/* <span>[{spread.bid}</span>-<span>{spread.ask}] : </span> */}
                       {/* <span>{spread.quantity}</span> */}
                     </div>
                     <Separator className="my-2" />
-                  {/* </div> */}
-                {/* ))} */}
+                  </div>
+                ))}
               </div>
             </ScrollArea>
             <div>
@@ -109,20 +115,20 @@ const SwapPage = () => {
                 collapsible
                 defaultValue="Selected Spread"
               >
-                {/* {choosenSpread !== null && choosenSpread && ( */}
-                  <AccordionItem value={`Selected Spread`}>
+                {choosenSwap !== null && choosenSwap && (
+                  <AccordionItem value={`Selected Swap`}>
                     <AccordionTrigger>
-                      <SwapRow />
+                      <SwapRow swap={choosenSwap} />
                     </AccordionTrigger>
                     <AccordionContent className="flex flex-col space-y-4">
-                      <SwapPropositionPage />
+                      <SwapPropositionPage propositions={choosenSwap.propositions} />
                     </AccordionContent>
                   </AccordionItem>
-                {/* )} */}
+                )}
               </Accordion>
             </div>
           </div>
-
+        )}
       </div>
     </Section>
   );

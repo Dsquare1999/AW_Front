@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 
-import { useRetrieveBilanQuery, useRetrieveSpreadOperationsQuery } from "@/redux/features/retrieveApiSlice";
+import { useRetrieveBilanQuery, useRetrieveSpreadOperationsQuery, useRetrieveSwapOperationsQuery } from "@/redux/features/retrieveApiSlice";
 import BondPortofolioPage from "@/components/alm/bonds/pages/BondPortofolioPage";
 import { BondProp } from "../types/BondType";
 import DisplayBondPortofolio from "@/components/alm/bonds/pages/DisplayBondPortofolio";
@@ -23,6 +23,7 @@ import ChatContainer from "@/components/alm/chat/chat-container";
 import SpreadPage from "@/components/alm/spreads/pages/SpreadPage";
 import SwapPage from "@/components/alm/swaps/pages/SwapPage";
 import { SpreadType } from "../types/SpreadType";
+import { SwapType } from "../types/SwapType";
 
 const ALMPage = () => {
   // Authentication redirection
@@ -49,6 +50,13 @@ const ALMPage = () => {
     isLoading: isSpreadLoading,
     isFetching: isSpreadFetching,
   } = useRetrieveSpreadOperationsQuery();
+
+  const [swaps, setSwaps] = useState<SwapType[]>([]);
+  const {
+    data: mySwaps,
+    isLoading: isSwapLoading,
+    isFetching: isSwapFetching,
+  } = useRetrieveSwapOperationsQuery();
   
 
   useEffect(() => {
@@ -72,7 +80,14 @@ const ALMPage = () => {
     } else {
       console.log("No Spread found !");
     }
-  }, [myBilan, mySpreads]);
+
+    if (mySwaps && mySwaps.length > 0) {
+      console.log("My swaps", mySwaps);
+      setSwaps(mySwaps);
+    } else {
+      console.log("No Swap found !");
+    }
+  }, [myBilan, mySpreads, mySwaps]);
 
 
   return (
@@ -115,7 +130,7 @@ const ALMPage = () => {
             </ResizablePanel>
             <ResizableHandle withHandle className="my-4" />
             <ResizablePanel defaultSize={48}>
-              <SwapPage />
+              <SwapPage bonds={bonds} swaps={swaps} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </section>

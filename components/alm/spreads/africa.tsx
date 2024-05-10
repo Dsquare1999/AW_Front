@@ -27,7 +27,7 @@ const Africa: React.FC<Props> = ({ selectFn }) => {
       "Ghana",
       "Guinea",
       "Gambia",
-      "GuineaBissau",
+      "Guinea-Bissau",
       "EquatorialGuinea",
       "Kenya",
       "Liberia",

@@ -8,7 +8,7 @@ export type PropositionType = {
     id : string;
     operation: string;
     price: number;
-    proposer: 1;
+    proposer: number;
     status: string;
     updated_at: string;
     volume: number;

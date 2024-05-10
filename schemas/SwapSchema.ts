@@ -1,10 +1,9 @@
 import { z } from "zod";
 
 const SwapSchema = z.object({
-  offer_isin: z.string().trim().min(1, { message: "Offer Isin is required" }),
+  offer: z.string().trim().min(1, { message: "Offer Isin is required" }),
   offer_duration: z
-    .string()
-    .trim()
+    .number()
     .min(1, { message: "Offer Duration is required" }),
   offer_quantity: z
     .number()
@@ -16,11 +15,8 @@ const SwapSchema = z.object({
     .trim()
     .min(1, { message: "Offer Country is required" }),
 
-
-    
   demand_duration: z
-    .string()
-    .trim()
+    .number()
     .min(1, { message: "Demand Duration is required" }),
   demand_quantity: z
     .number()
@@ -33,4 +29,4 @@ const SwapSchema = z.object({
     .min(1, { message: "Demand Country is required" }),
 });
 
-export default SwapSchema
+export default SwapSchema;
