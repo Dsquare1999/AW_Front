@@ -178,7 +178,8 @@ const Sidebar = () => {
             </DrawerTrigger>
             <DrawerContent>
               <ScrollArea className="flex w-full">
-                <ChatContainer />
+                <ChatContainer collapsedSidebar={false} />
+                
               </ScrollArea>
             </DrawerContent>
           </Drawer>

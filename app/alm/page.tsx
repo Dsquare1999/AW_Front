@@ -144,7 +144,7 @@ const ALMPage = () => {
             </ResizablePanel>
             <ResizableHandle withHandle className="my-4" />
             <ResizablePanel defaultSize={48}>
-              <ChatContainer />
+              <ChatContainer collapsedSidebar={true} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </section>

@@ -1,8 +1,17 @@
 import { AdminBondSchema, BondSchema } from "@/schemas";
 import { apiSlice } from "../services/apiSlice";
+import { RoomType, UserType } from "@/app/types/ChatType";
 
 const retrieveApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
+        // Me
+        retrieveMe: builder.query<UserType, void>({
+            query: () => '/auth/me/'
+        }),
+        // Bond
+        retrieveAdminBond : builder.query<typeof BondSchema, void>({
+            query: () => '/admin-bonds/'
+        }),
         retrieveBond : builder.query<typeof BondSchema, void>({
             query: () => '/bond/'
         }),
@@ -27,10 +36,19 @@ const retrieveApiSlice = apiSlice.injectEndpoints({
         retrieveSwapPropositions: builder.query<any, void>({
             query:() => '/swap_propositions/'
         }),
+        // Chat
+        retrieveRooms: builder.query<RoomType[], void>({
+            query:() => '/rooms/'
+        }),
+        retrieveRoomMessages: builder.query<any, string>({
+            query: (room_id: string) => `/rooms/${room_id}/messages/`,
+        }),
     })
 })
 
 export const {
+    useRetrieveMeQuery,
+    useRetrieveAdminBondQuery,
     useRetrieveBondQuery,
     useRetrieveBondPortofolioQuery,
     useRetrieveBilanQuery,
@@ -38,4 +56,6 @@ export const {
     useRetrieveSpreadPropositionsQuery,
     useRetrieveSwapOperationsQuery,
     useRetrieveSwapPropositionsQuery,
+    useRetrieveRoomsQuery,
+    useRetrieveRoomMessagesQuery
 } = retrieveApiSlice

@@ -4,18 +4,21 @@ import React, { useRef } from "react";
 import { Avatar, AvatarImage } from "../../ui/avatar";
 import ChatBottombar from "./chat-bottombar";
 import { AnimatePresence, motion } from "framer-motion";
+import { MessageType, RoomType, UserType } from "@/app/types/ChatType";
 
 interface ChatListProps {
-  messages?: Message[];
-  selectedUser: UserData;
-  sendMessage: (newMessage: Message) => void;
+  messages?: MessageType[];
+  selectedRoom: RoomType;
+  sendMessage: (newMessage: MessageType, me: UserType) => void;
+  me: UserType;
   isMobile: boolean;
 }
 
 export function ChatList({
   messages,
-  selectedUser,
+  selectedRoom,
   sendMessage,
+  me,
   isMobile
 }: ChatListProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -55,28 +58,28 @@ export function ChatList({
               }}
               className={cn(
                 "flex flex-col gap-2 p-4 whitespace-pre-wrap",
-                message.name !== selectedUser.name ? "items-end" : "items-start"
+                message.user.first_name !== selectedRoom.name ? "items-end" : "items-start"
               )}
             >
               <div className="flex gap-3 items-center">
-                {message.name === selectedUser.name && (
+                {message.user.first_name === selectedRoom.name && (
                   <Avatar className="flex justify-center items-center">
                     <AvatarImage
-                      src={message.avatar}
-                      alt={message.name}
+                      src={'/User1.png'}
+                      alt={message.user.first_name}
                       width={6}
                       height={6}
                     />
                   </Avatar>
                 )}
-                <span className=" bg-accent p-3 rounded-md max-w-xs">
-                  {message.message}
+                <span className=" bg-accent p-3 rounded-md max-w-xs text-xs">
+                  {message.content}
                 </span>
-                {message.name !== selectedUser.name && (
+                {message.user.first_name !== selectedRoom.name && (
                   <Avatar className="flex justify-center items-center">
                     <AvatarImage
-                      src={message.avatar}
-                      alt={message.name}
+                      src={'/User1.png'}
+                      alt={message.user.first_name}
                       width={6}
                       height={6}
                     />
@@ -87,7 +90,7 @@ export function ChatList({
           ))}
         </AnimatePresence>
       </div>
-      <ChatBottombar sendMessage={sendMessage} isMobile={isMobile}/>
+      <ChatBottombar sendMessage={sendMessage} selectedRoom={selectedRoom} me={me} isMobile={isMobile}/>
     </div>
   );
 }

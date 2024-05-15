@@ -1,7 +1,6 @@
 import getAdminBonds from "@/app/actions/getAdminBonds";
 import { AdminBondType } from "@/app/types/AdminBondType";
 import { BondFieldName } from "@/schemas/BondSchema";
-
 export interface BondSelectField {
   name: "isin";
   type: "bond";

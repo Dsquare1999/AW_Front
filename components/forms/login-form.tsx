@@ -66,7 +66,8 @@ const LoginForm = () => {
 
               const user={
                 'full_name':response.full_name,
-                'email':response.email
+                'email':response.email,
+                'id': response.id,
               }
 
               dispatch(setAuth());

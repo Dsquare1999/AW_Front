@@ -12,34 +12,32 @@ import {
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarImage } from "../../ui/avatar";
 import { Message } from "@/data/chats";
+import clsx from "clsx";
+import { RoomType, UserType } from "@/app/types/ChatType";
+import { useRetrieveRoomsQuery } from "@/redux/features/retrieveApiSlice";
 
 interface SidebarProps {
   isCollapsed: boolean;
-  links: {
-    name: string;
-    messages: Message[];
-    avatar: string;
-    variant: "secondary" | "ghost";
-  }[];
-  onClick?: () => void;
+  rooms : RoomType[]
+  me : UserType
+  chooseRoom: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, room: RoomType) => void;
   isMobile: boolean;
 }
 
-export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
-  // isCollapsed = true
+export function Sidebar({rooms, isCollapsed, me, isMobile, chooseRoom }: SidebarProps) {
+
   return (
     <div
       data-collapsed={isCollapsed}
       className="relative group flex flex-col h-full gap-4 p-2 data-[collapsed=true]:p-2 "
     >
-      {!isCollapsed && (
-        <div className="flex justify-between p-2 items-center">
-          <div className="flex gap-2 items-center text-2xl">
+        <div className={clsx("flex  p-2 items-center", isCollapsed?'flex-col':'justify-between')}>
+          <div className="flex gap-2 items-center text-md">
             <p className="font-medium">Chats</p>
-            <span className="text-zinc-300">({links.length})</span>
+            <span className="text-zinc-300">({rooms.length})</span>
           </div>
 
-          <div>
+          <div className={clsx('flex', isCollapsed?'flex-row':'')}>
             <Link
               href="#"
               className={cn(
@@ -61,74 +59,70 @@ export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
             </Link>
           </div>
         </div>
-      )}
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-        {links.map((link, index) =>
+
+        {rooms.map((room) => 
           isCollapsed ? (
-            <TooltipProvider key={index}>
-              <Tooltip key={index} delayDuration={0}>
+          <TooltipProvider key={room.id}>
+              <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
-                  <Link
-                    href="#"
+                  <div
+                    onClick={(e) => chooseRoom(e, room)}
                     className={cn(
-                      buttonVariants({ variant: link.variant, size: "icon" }),
+                      buttonVariants({ variant: room.variant, size: "icon" }),
                       "h-11 w-11 md:h-16 md:w-16",
-                      link.variant === "secondary" &&
+                      room.variant === "secondary" &&
                         "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                     )}
                   >
                     <Avatar className="flex justify-center items-center">
                       <AvatarImage
-                        src={link.avatar}
-                        alt={link.avatar}
+                        src={room.avatar}
+                        alt={room.avatar}
                         width={6}
                         height={6}
-                        className="w-10 h-10 "
+                        className="w-9 h-9 rounded-full"
                       />
                     </Avatar>{" "}
-                    <span className="sr-only">{link.name}</span>
-                  </Link>
+                    <span className="sr-only">{room.name}</span>
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
                   className="flex items-center gap-4"
                 >
-                  {link.name}
+                  {room.name}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          ) : (
-            <Link
-              key={index}
-              href="#"
-              className={cn(
-                buttonVariants({ variant: link.variant, size: "lg" }),
-                link.variant === "secondary" &&
-                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white shrink",
-                "justify-start gap-4"
-              )}
-            >
-              <Avatar className="flex justify-center items-center">
-                <AvatarImage
-                  src={link.avatar}
-                  alt={link.avatar}
-                  width={6}
-                  height={6}
-                  className="w-10 h-10 "
-                />
-              </Avatar>
-              <div className="flex flex-col max-w-28">
-                <span>{link.name}</span>
-                {link.messages.length > 0 && (
-                  <span className="text-zinc-300 text-xs truncate ">
-                    {link.messages[link.messages.length - 1].name.split(" ")[0]}
-                    : {link.messages[link.messages.length - 1].message}
-                  </span>
-                )}
-              </div>
-            </Link>
-          )
-        )}
+        ) : (
+          <div
+            key={room.id}
+            className={cn(
+              buttonVariants({ variant: room.variant, size: "icon" }),
+              "h-11 w-11 md:h-16 md:w-16",
+              room.variant === "secondary" &&
+                "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+            )}
+          >
+            <Avatar className="flex justify-center items-center">
+              <AvatarImage
+                src={room.avatar}
+                alt={room.name}
+                width={6}
+                height={6}
+                className="w-9 h-9 rounded-full "
+              />
+            </Avatar>
+            <div className="flex flex-col max-w-28">
+              <span className="text-xs">{room.name}</span>
+              <span className="text-zinc-300 text-[10px] truncate ">
+                {room.messages[room.messages.length - 1].user.id === me.id ? "You " : room.messages[room.messages.length - 1].user.first_name }
+                : {room.messages[room.messages.length - 1].content}
+              </span>
+            </div>
+          </div>
+        ))}
       </nav>
     </div>
   );

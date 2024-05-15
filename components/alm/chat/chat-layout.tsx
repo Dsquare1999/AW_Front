@@ -11,6 +11,12 @@ import { cn } from "@/lib/utils";
 import { Sidebar } from "./sidebar";
 import { Chat } from "./chat";
 
+import {
+  useRetrieveRoomsQuery,
+  useRetrieveMeQuery,
+} from "@/redux/features/retrieveApiSlice";
+import { RoomType, UserType, DefaultALMUser } from "@/app/types/ChatType";
+
 interface ChatLayoutProps {
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
@@ -24,7 +30,36 @@ export function ChatLayout({
 }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const [selectedUser, setSelectedUser] = React.useState(userData[0]);
+  const [me, setMe] = React.useState<UserType>(DefaultALMUser);
+  const [selectedRoom, setSelectedRoom] = React.useState<RoomType | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+
+  const {
+    data: rooms,
+    isLoading: isRoomsLoading,
+    isFetching: isRoomsFetching,
+  } = useRetrieveRoomsQuery();
+
+  const {
+    data: myData,
+    isLoading: isMeLoading,
+    isFetching: isMeFetching,
+  } = useRetrieveMeQuery();
+
+  const chooseRoom = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    room: RoomType
+  ) => {
+    setSelectedRoom(room);
+  };
+
+  useEffect(() => {
+    if (myData) {
+      setMe(myData);
+    }
+  }, [myData]);
+
+  console.log("rooms", rooms);
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -39,50 +74,75 @@ export function ChatLayout({
   }, []);
 
   return (
-    <ResizablePanelGroup
-      direction="horizontal"
-      onLayout={(sizes: number[]) => {
-        Cookies.set(`react-resizable-panels:layout`, JSON.stringify(sizes));
-      }}
-      className="h-full items-stretch"
-    >
-      <ResizablePanel
-        defaultSize={defaultLayout[0]}
-        collapsedSize={navCollapsedSize}
-        collapsible={true}
-        minSize={isMobile ? 0 : 24}
-        maxSize={isMobile ? 8 : 30}
-        onCollapse={() => {
-          setIsCollapsed(true);
-          Cookies.set(`react-resizable-panels:collapsed`, JSON.stringify(true));
-        }}
-        onExpand={() => {
-          setIsCollapsed(false);
-          Cookies.set(`react-resizable-panels:collapsed`, JSON.stringify(false));
-        }}
-        className={cn(
-          isCollapsed && "min-w-[50px] md:min-w-[70px] transition-all duration-300 ease-in-out"
-        )}
-      >
-        <Sidebar
-          isCollapsed={isCollapsed || isMobile}
-          links={userData.map((user) => ({
-            name: user.name,
-            messages: user.messages ?? [],
-            avatar: user.avatar,
-            variant: selectedUser.name === user.name ? "secondary" : "ghost",
-          }))}
-          isMobile={isMobile}
-        />
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-        <Chat
-          messages={selectedUser.messages}
-          selectedUser={selectedUser}
-          isMobile={isMobile}
-        />
-      </ResizablePanel>
-    </ResizablePanelGroup>
+    <>
+      {rooms === undefined ? (
+        <div>No discussion started yet</div>
+      ) : (
+        <ResizablePanelGroup
+          direction="horizontal"
+          onLayout={(sizes: number[]) => {
+            Cookies.set(`react-resizable-panels:layout`, JSON.stringify(sizes));
+          }}
+          className="h-full items-stretch"
+        >
+          <ResizablePanel
+            defaultSize={defaultLayout[0]}
+            collapsedSize={navCollapsedSize}
+            collapsible={true}
+            minSize={isMobile ? 0 : 24}
+            maxSize={isMobile ? 8 : 30}
+            onCollapse={() => {
+              setIsCollapsed(true);
+              Cookies.set(
+                `react-resizable-panels:collapsed`,
+                JSON.stringify(true)
+              );
+            }}
+            // onExpand={() => {
+            //   setIsCollapsed(false);
+            //   Cookies.set(`react-resizable-panels:collapsed`, JSON.stringify(false));
+            // }}
+            className={cn(
+              isCollapsed &&
+                "min-w-[50px] md:min-w-[70px] transition-all duration-300 ease-in-out"
+            )}
+          >
+            <Sidebar
+              // isCollapsed={isCollapsed || isMobile}
+              isCollapsed={isCollapsed}
+              rooms={rooms.map((room: RoomType) => ({
+                id: room.id,
+                name: room.name,
+                messages: room.messages ?? [],
+                participants: room.participants,
+                avatar: "/User1.png",
+                variant: selectedRoom
+                  ? selectedRoom.id === room.id
+                    ? "secondary"
+                    : "ghost"
+                  : "ghost",
+              }))}
+              chooseRoom={chooseRoom}
+              me={me}
+              isMobile={isMobile}
+            />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+            {selectedRoom ? (
+              <Chat
+                selectedRoom={selectedRoom}
+                isMobile={isMobile}
+                me={me}
+              />
+            ) : (
+              <div className="flex justify-center items-center">
+                <p className="text-lg">Select a room to start chatting</p>
+              </div>
+            )}
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      )}
+    </>
   );
 }

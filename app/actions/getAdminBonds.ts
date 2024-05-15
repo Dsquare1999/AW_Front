@@ -1,5 +1,8 @@
 
+import { useRetrieveAdminBondQuery } from "@/redux/features/retrieveApiSlice";
 import axios from "axios";
+import React from "react";
+import { AdminBondType } from "../types/AdminBondType";
 
 export default async function getAdminBonds() {
 
