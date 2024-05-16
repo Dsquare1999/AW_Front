@@ -29,19 +29,32 @@ export default function App({
       <TableCaption>{title}</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Labels</TableHead>
-          {data.labels.map((label, index) => (
-            <TableHead key={index}>{label}</TableHead>
+          <TableHead className="text-[10px]">Bonds</TableHead>
+          {data.datasets.map((data) => (
+            <TableHead key={data.label} className="text-[10px]">
+              {data.label}
+            </TableHead>
           ))}
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.datasets.map((dataset, index) => (
-          <TableRow key={index + `${dataset.label}`}>
-            <TableCell key={index}>{dataset.label}</TableCell>
-            {dataset.data.map((data, index) => (
-              <TableCell key={index + `${data}`}>{data}</TableCell>
-            ))}
+        {data.labels.map((label, indexLabel) => (
+          <TableRow key={indexLabel}>
+            <TableCell className="text-[10px]">{label}</TableCell>
+            {data.datasets.map(
+              (
+                data: {
+                  label: string;
+                  data: number[];
+                  backgroundColor: string | string[];
+                },
+                index
+              ) => (
+                <TableCell key={index + `${data}`} className="text-[10px] text-center">
+                  {data["data"][indexLabel]}
+                </TableCell>
+              )
+            )}
           </TableRow>
         ))}
       </TableBody>

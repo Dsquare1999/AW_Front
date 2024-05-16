@@ -30,12 +30,12 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-import { BondIsins } from "@/data/fields/bondFields";
 import { calculateExpirationDate } from "@/schemas/SpreadSchema";
 
 import { useCreateSpreadMutation } from "@/redux/features/createApiSlice";
 import { spread } from "lodash";
 import { toast } from "react-toastify";
+import { useRetrieveAdminBondQuery } from "@/redux/features/retrieveApiSlice";
 
 interface AddSpreadFormProps {
   countrySelected: string;
@@ -43,6 +43,11 @@ interface AddSpreadFormProps {
 
 const AddSpreadForm: React.FC<AddSpreadFormProps> = ({ countrySelected }) => {
   const [createSpread, { isLoading }] = useCreateSpreadMutation();
+  
+  const {
+    data: adminBonds
+  } = useRetrieveAdminBondQuery();
+
 
   const [localValues, setLocalValues] = useState([0, 100_000]);
   const form = useForm<z.infer<typeof SpreadSchema>>({
@@ -105,15 +110,15 @@ const AddSpreadForm: React.FC<AddSpreadFormProps> = ({ countrySelected }) => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {BondIsins.map((bondIsin) => (
+                            {adminBonds ? adminBonds.map((bond) => (
                               <SelectItem
                                 className="text-[10px]"
-                                key={bondIsin.id}
-                                value={bondIsin.id}
+                                key={bond.id}
+                                value={bond.id}
                               >
-                                {bondIsin.isin}
+                                {bond.isin}
                               </SelectItem>
-                            ))}
+                            )) : <div className="text-[10px] text-center">No admin Bond Found !</div>}
                           </SelectContent>
                         </Select>
                         <FormMessage />

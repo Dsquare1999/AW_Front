@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import ThemeDropDown from "../theme-dropdown";
 import { useLogoutMutation } from "@/redux/features/authApiSlice";

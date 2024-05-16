@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
@@ -36,7 +36,7 @@ import { HeaderProps } from "./datatable/Column";
 import axios from "axios";
 
 import { AdminBondFieldName } from "@/schemas/AdminBondSchema";
-import { BondFields, Isins } from "@/data/fields/bondFields";
+import { useRetrieveAdminBondQuery } from "@/redux/features/retrieveApiSlice";
 
 
 interface RowData {
@@ -85,8 +85,13 @@ export default function UploadBond({
     resolver: zodResolver(formSchema),
   });
 
-  // ---------------- States -------------------------------------------
+  // ---------------- Isins --------------------------------------------
+  const {
+    data: adminBonds
+  } = useRetrieveAdminBondQuery();
 
+  // ---------------- States -------------------------------------------
+  const [isins, setIsins] = useState<string[]>([]);
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -108,6 +113,14 @@ export default function UploadBond({
     "op injection",
     "op withdrawal",
   ];
+
+  // ---------------------- UseEffect -----------------------------------------------
+
+  useEffect(() => {
+    if (adminBonds) {
+      setIsins(adminBonds.map((bond) => bond.isin));
+    }
+  }, [adminBonds]);
 
   // -------------- Drag and Drop ---------------------------------------------------
 
@@ -184,7 +197,7 @@ export default function UploadBond({
 
   const isValidRow = (row: RowData): { status: boolean; error: string } => {
     // isin checking
-    if (!isAdmin && !Isins.includes(row.isin)) {
+    if (!isAdmin && !isins.includes(row.isin)) {
       return {
         status: false,
         error: "Unknown Bond isin",

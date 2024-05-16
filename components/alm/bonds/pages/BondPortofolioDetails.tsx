@@ -23,6 +23,7 @@ import { BiSolidDoughnutChart } from "react-icons/bi";
 import { AiOutlineRadarChart } from "react-icons/ai";
 import { PiTableFill } from "react-icons/pi";
 import { IoExpandOutline } from "react-icons/io5";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
 import { BondProp } from "@/app/types/BondType";
 import { PortofolioDetailData } from "@/data/bonds/PortofolioDetailData";
@@ -32,6 +33,7 @@ interface BondPortofolioDetailsProps {
   bonds: BondProp[];
   detailLabel: string | null;
   detailData: number | null;
+  backToPortofolio: () => void;
 }
 
 const choosenChart = (chartType: string, data: any, title: string) => {
@@ -53,6 +55,7 @@ const BondPortofolioDetails = ({
   bonds,
   detailLabel,
   detailData,
+  backToPortofolio,
 }: BondPortofolioDetailsProps) => {
   const [chartType, setChartType] = useState<string>("Doughnut");
 
@@ -60,6 +63,9 @@ const BondPortofolioDetails = ({
     <>
       <Menubar>
         <MenubarMenu>
+          <MenubarTrigger onClick={backToPortofolio}>
+            <MdOutlineKeyboardBackspace />
+          </MenubarTrigger>
           <MenubarTrigger onClick={() => setChartType("Pie")}>
             <FaChartPie />
           </MenubarTrigger>

@@ -39,23 +39,27 @@ export default function App({
     data,
     title,
     callback,
+    labelPosition
 }: {
     type: string;
     data: dataProps;
     title: string;
     callback: (data: InteractionItem[]) => void;
+    labelPosition?:'right'|'left'|'bottom'|'top';
 }) {
     const options = {
         responsive: true,
         plugins: {
             legend: {
-                position: "top" as const,
+                position: labelPosition ? labelPosition : undefined,
+                display: labelPosition ? true : false,
             },
             title: {
                 display: false,
                 text: title,
             },
         },
+        
     };
     const printDatasetAtEvent = (dataset: InteractionItem[]) => {
         if (!dataset.length) return;

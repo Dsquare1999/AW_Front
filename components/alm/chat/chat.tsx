@@ -43,10 +43,8 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
         content: lastJsonMessage.message as string,
         read_by: [lastJsonMessage.user]  as number[],
       };
-      console.log("New message received", message)
 
       setRealTimeMessages((realTimeMessages) => [...realTimeMessages, message]);
-      console.log("Real time messages", realTimeMessages)
     }
   }, [lastJsonMessage]);
 

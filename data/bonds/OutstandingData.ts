@@ -41,7 +41,7 @@ export const OutstandingData = (bonds: BondProp[], detail: boolean = false) => {
                 bondOutstandingValues.push(outstanding);
             }
             datasets.push({
-                label: bond.isin,
+                label: bond.admin_bond.isin,
                 data: bondOutstandingValues,
                 backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`,
             });

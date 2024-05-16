@@ -39,12 +39,13 @@ import { Input } from "@/components/ui/input";
 
 import { BondSchema, AdminBondSchema } from "@/schemas";
 
-import { BondFields } from "@/data/fields/bondFields";
+import  BondFields  from "@/data/fields/bondFields";
 import { AdminBondFields } from "@/data/fields/AdminBondFields";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRetrieveAdminBondQuery } from "@/redux/features/retrieveApiSlice";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -61,6 +62,7 @@ export function DataTable<TData, TValue>({
   handleChange,
   addNewBond,
 }: DataTableProps<TData, TValue>) {
+  const [isins, setIsins] = React.useState<string[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [editedCell, setEditedCell] = React.useState<{
     rowId: string;
@@ -86,6 +88,10 @@ export function DataTable<TData, TValue>({
 
   const choosenFields = getChoosenFields(endpoint);
   const choosenSchema = getChoosenSchema(endpoint);
+
+  const {
+    data: adminBonds
+  } = useRetrieveAdminBondQuery();
 
   const form = useForm<z.infer<typeof choosenSchema>>({
     resolver: zodResolver(choosenSchema),
@@ -218,13 +224,13 @@ export function DataTable<TData, TValue>({
                                       <option value="" disabled selected>
                                         Select {SelectedBond.name}
                                       </option>
-                                      {SelectedBond.options.map(
+                                      {adminBonds? adminBonds.map(
                                         (option, index) => (
                                           <option key={index} value={option.id}>
                                             {option.isin}
                                           </option>
                                         )
-                                      )}
+                                      ) : null}
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                       <svg

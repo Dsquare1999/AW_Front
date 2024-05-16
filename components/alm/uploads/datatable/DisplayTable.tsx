@@ -4,11 +4,10 @@ import {
     TabsList,
     TabsTrigger,
   } from "@/components/ui/tabs"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DataTable } from "./DataTable"
 import { Columns } from "./Column"
-import { AdminBondFieldName } from "@/schemas/AdminBondSchema";
-import { BondFields } from "@/data/fields/bondFields"
+import { useRetrieveAdminBondQuery } from "@/redux/features/retrieveApiSlice";
 
 interface RowData {
     rowId : string
@@ -38,35 +37,30 @@ type Props = {
     updateData : (dataTableData: DataTableProps[], rejectedDataTableData : DataTableProps[]) => void;
 }
 
-interface SelectField {
-  name: AdminBondFieldName;
-  type: "select";
-  placeholder: string;
-  options: string[];
-}
-
 
 
 export const DispalyTable = ({FilesDataTables, RejectedFilesDataTables, endpoint, isAdmin, updateData}: Props) => {
-    
+    const [isins, setIsins] = useState<string[]>([]);
     const [dataTableData, setDataTableData] = useState<DataTableProps[]>(FilesDataTables)
     const [rejectedDataTableData, setRejectedDataTableData] = useState<DataTableProps[]>(RejectedFilesDataTables)
 
     // -------------------
 
-    let isinField: SelectField
+    const {
+      data: adminBonds
+    } = useRetrieveAdminBondQuery();
 
-    BondFields.map((field) =>{
-      if(field.name == "isin"){
-        isinField = field as SelectField
+    useEffect(() => {
+      if (adminBonds) {
+        setIsins(adminBonds.map((bond) => bond.isin));
       }
-
-    })
+    }, [adminBonds]);
+  
 
     const isValidRow = (row: RowData): { status: boolean, error: string } => {
 
         // isin checking
-        if(!isAdmin && !isinField.options.includes(row.isin)){
+        if(!isAdmin && !isins.includes(row.isin)){
           return {
               status: false,
               error: "Unknown Bond isin"

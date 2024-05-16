@@ -33,7 +33,6 @@ import React from "react";
 import clsx from "clsx";
 
 import AddSpreads from "../AddSpread";
-import { BondIsins } from "@/data/fields/bondFields";
 
 interface SpreadPageProps {
   spreads: SpreadType[];

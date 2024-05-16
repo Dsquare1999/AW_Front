@@ -1,4 +1,3 @@
-import getAdminBonds from "@/app/actions/getAdminBonds";
 import { AdminBondType } from "@/app/types/AdminBondType";
 import { BondFieldName } from "@/schemas/BondSchema";
 export interface BondSelectField {
@@ -55,28 +54,13 @@ export type AllAddFormValues = {
     : string;
 };
 
-let BondFields: AllFormField[] = [];
-let BondIsins: AdminBondType[] = [];
-let Isins : string[] = [];
-
-const fetchAdminBonds = async () => {
-  try {
-    return (await getAdminBonds()) as AdminBondType[];
-  } catch (error) {
-    console.error("Erreur lors de la récupération des Admin Bonds :", error);
-    return [];
-  }
-};
-
-fetchAdminBonds().then((bondIsins) => {
-  BondIsins = bondIsins
-  Isins = bondIsins.map((bond) => bond.isin)
-  BondFields = [
+  
+const BondFields : AllFormField[ ]= [
     {
       name: "isin",
       type: "bond",
       placeholder: "Code Isin",
-      options: bondIsins ? bondIsins : [],
+      options: [],
     },
     {
       name: "outstanding",
@@ -162,6 +146,5 @@ fetchAdminBonds().then((bondIsins) => {
       placeholder: "Bond Daily Cotation",
     },
   ];
-});
 
-export { Isins, BondIsins, BondFields };
+export default BondFields ;

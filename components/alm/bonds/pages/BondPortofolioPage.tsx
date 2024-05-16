@@ -20,9 +20,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import { CaretSortIcon } from "@radix-ui/react-icons";
-
-import { Button } from "../../../ui/button";
 import Section from "../../../common/Section";
 
 import { CashflowProp, BondProp } from "@/app/types/BondType";

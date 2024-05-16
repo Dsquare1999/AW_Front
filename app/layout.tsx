@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins, Paytone_One } from "next/font/google";
 import "./globals.css";
-import styles from "@/components/styles/backgroundVideo.module.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import Provider from '@/redux/provider';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
+import { ThemeProvider } from "@/components/theme-provider";
+import Provider from "@/redux/provider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { Toaster } from "@/components/ui/toaster"
-import { AuthProvider } from "@/AuthProvider";
+import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  weight: ["400"],
+  subsets: ["latin"],
+});
+const paytoneOne = Paytone_One({
+  weight: ["400"],
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "AlgoWay",
@@ -24,24 +29,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* <BackgroundVideo /> */}
-      <body className={inter.className}>
+      <body className={poppins.className}>
         <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              // disableTransitionOnChange
-            >
-              {/* <AuthProvider> */}
-                <Provider>
-                  <ToastContainer />
-                    <div>
-                      {children}
-                    </div>
-                  <Toaster />
-              </Provider>
-            {/* </AuthProvider> */}
-
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          // disableTransitionOnChange
+        >
+          <Provider>
+            <ToastContainer />
+            <div>{children}</div>
+            <Toaster />
+          </Provider>
         </ThemeProvider>
       </body>
     </html>

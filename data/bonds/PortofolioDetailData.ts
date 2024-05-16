@@ -17,14 +17,14 @@ export const PortofolioDetailData = (bonds: BondProp[], detailLabel: string, det
 
     bonds.map((bond) => {
         if (from >= new Date(bond.value_date) && to <= new Date(bond.due_date)) {
-            labels.push(bond.isin + '_' + bond.type + '_' + bond.facial_rate + '%');
+            const facialRate = (bond.facial_rate * 100).toFixed(1);
+            labels.push(bond.admin_bond.isin + '_' + bond.type + '_' + facialRate + '%');
             detailValues.push(bond.outstanding);
         }
     });
 
-    console.log("Portofolio Details" , labels, detailValues);
     const datasets = [{
-        label: `Portofolio Outstandings Details -- ${formatDate(from)} to ${formatDate(to)}`,
+        label: `${formatDate(from)} - ${formatDate(to)}`,
         data: detailValues,
         backgroundColor: labels.map(() => `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`)
     }];

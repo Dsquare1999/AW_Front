@@ -1,6 +1,7 @@
-import { AdminBondSchema, BondSchema } from "@/schemas";
 import { apiSlice } from "../services/apiSlice";
 import { RoomType, UserType } from "@/app/types/ChatType";
+import { AdminBondType } from "@/app/types/AdminBondType";
+import { BondProp } from "@/app/types/BondType";
 
 const retrieveApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -9,10 +10,10 @@ const retrieveApiSlice = apiSlice.injectEndpoints({
             query: () => '/auth/me/'
         }),
         // Bond
-        retrieveAdminBond : builder.query<typeof BondSchema, void>({
+        retrieveAdminBond : builder.query<AdminBondType[], void>({
             query: () => '/admin-bonds/'
         }),
-        retrieveBond : builder.query<typeof BondSchema, void>({
+        retrieveBond : builder.query<BondProp[], void>({
             query: () => '/bond/'
         }),
         retrieveBondPortofolio: builder.query<any, void>({

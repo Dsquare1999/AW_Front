@@ -29,28 +29,26 @@ export function ChatLayout({
   navCollapsedSize,
 }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
+  const [triggerQuery, setTriggerQuery] = useState<boolean>(true);
   const [me, setMe] = React.useState<UserType>(DefaultALMUser);
   const [selectedRoom, setSelectedRoom] = React.useState<RoomType | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  const {
-    data: rooms,
-    isLoading: isRoomsLoading,
-    isFetching: isRoomsFetching,
-  } = useRetrieveRoomsQuery();
+  const { data: rooms } = useRetrieveRoomsQuery(undefined, {
+    pollingInterval: 5000,
+    refetchOnMountOrArgChange: false,
+    skip: !triggerQuery,
+  });
 
-  const {
-    data: myData,
-    isLoading: isMeLoading,
-    isFetching: isMeFetching,
-  } = useRetrieveMeQuery();
+  const { data: myData } = useRetrieveMeQuery();
 
   const chooseRoom = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     room: RoomType
   ) => {
     setSelectedRoom(room);
-  }
+    setTriggerQuery(true);
+  };
 
   useEffect(() => {
     if (myData) {
@@ -75,7 +73,9 @@ export function ChatLayout({
   return (
     <>
       {rooms === undefined ? (
-        <div className="flex justify-center items-center text-[10px]">No discussion started yet</div>
+        <div className="flex justify-center items-center text-[10px]">
+          No discussion started yet
+        </div>
       ) : (
         <ResizablePanelGroup
           direction="horizontal"
@@ -129,14 +129,12 @@ export function ChatLayout({
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
             {selectedRoom ? (
-              <Chat
-                selectedRoom={selectedRoom}
-                isMobile={isMobile}
-                me={me}
-              />
+              <Chat selectedRoom={selectedRoom} isMobile={isMobile} me={me} />
             ) : (
               <div className="flex justify-center items-center">
-                <p className="text-[10px] flex justify-center items-center">Select a room to start chatting</p>
+                <p className="text-[10px] flex justify-center items-center">
+                  Select a room to start chatting
+                </p>
               </div>
             )}
           </ResizablePanel>

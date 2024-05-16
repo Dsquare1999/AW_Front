@@ -24,6 +24,7 @@ import SpreadPage from "@/components/alm/spreads/pages/SpreadPage";
 import SwapPage from "@/components/alm/swaps/pages/SwapPage";
 import { SpreadType } from "../types/SpreadType";
 import { SwapType } from "../types/SwapType";
+import AlmFooter from "@/components/alm/AlmFooter";
 
 const ALMPage = () => {
   // Authentication redirection
@@ -149,6 +150,7 @@ const ALMPage = () => {
           </ResizablePanelGroup>
         </section>
       </main>
+      <AlmFooter />
     </div>
   );
 };
