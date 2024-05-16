@@ -1,4 +1,3 @@
-import { Message, UserData } from "@/data/chats";
 import { cn } from "@/lib/utils";
 import React, { useRef } from "react";
 import { Avatar, AvatarImage } from "../../ui/avatar";

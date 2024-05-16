@@ -1,7 +1,7 @@
 "use client";
 import Cookies from "js-cookie";
 import { userData } from "@/data/chats";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -29,7 +29,6 @@ export function ChatLayout({
   navCollapsedSize,
 }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [selectedUser, setSelectedUser] = React.useState(userData[0]);
   const [me, setMe] = React.useState<UserType>(DefaultALMUser);
   const [selectedRoom, setSelectedRoom] = React.useState<RoomType | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -51,7 +50,7 @@ export function ChatLayout({
     room: RoomType
   ) => {
     setSelectedRoom(room);
-  };
+  }
 
   useEffect(() => {
     if (myData) {
@@ -76,7 +75,7 @@ export function ChatLayout({
   return (
     <>
       {rooms === undefined ? (
-        <div>No discussion started yet</div>
+        <div className="flex justify-center items-center text-[10px]">No discussion started yet</div>
       ) : (
         <ResizablePanelGroup
           direction="horizontal"
@@ -137,7 +136,7 @@ export function ChatLayout({
               />
             ) : (
               <div className="flex justify-center items-center">
-                <p className="text-lg">Select a room to start chatting</p>
+                <p className="text-[10px] flex justify-center items-center">Select a room to start chatting</p>
               </div>
             )}
           </ResizablePanel>

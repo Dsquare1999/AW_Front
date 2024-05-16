@@ -25,7 +25,8 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
 
   useEffect(() => {
     console.log("Connection state changed", readyState);
-  }, [readyState]);
+    setRealTimeMessages(selectedRoom?.messages ?? []);
+  }, [readyState, selectedRoom]);
 
   useEffect(() => {
     if (
@@ -42,9 +43,12 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
         content: lastJsonMessage.message as string,
         read_by: [lastJsonMessage.user]  as number[],
       };
+      console.log("New message received", message)
+
       setRealTimeMessages((realTimeMessages) => [...realTimeMessages, message]);
+      console.log("Real time messages", realTimeMessages)
     }
-  }, [lastJsonMessage, realTimeMessages]);
+  }, [lastJsonMessage]);
 
   const sendMessage = (newMessage: MessageType, user: UserType) => {
     sendJsonMessage({
@@ -58,7 +62,7 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
       <ChatTopbar selectedRoom={selectedRoom} />
 
       <ChatList
-        messages={selectedRoom.messages}
+        messages={realTimeMessages}
         selectedRoom={selectedRoom}
         sendMessage={sendMessage}
         isMobile={isMobile}
