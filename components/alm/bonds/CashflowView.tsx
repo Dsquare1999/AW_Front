@@ -13,6 +13,7 @@ import { CashflowProp } from "@/app/types/BondType";
 import { CashflowData } from "@/data/bonds/CashflowsData";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { useCallback, useState } from "react";
+import clsx from "clsx";
 
 interface CashflowViewProps {
   due_date: string;
@@ -20,12 +21,14 @@ interface CashflowViewProps {
   cashflows: {
     [date: string]: CashflowProp;
   };
+  size ?: 'small'|'medium'|'large'
 }
 
 const CashflowView: React.FunctionComponent<CashflowViewProps> = ({
   due_date,
   value_date,
   cashflows,
+  size = 'small'
 }) => {
   const [from, setFrom] = useState<Date>(new Date());
 
@@ -42,7 +45,7 @@ const CashflowView: React.FunctionComponent<CashflowViewProps> = ({
   const [comparedTo, setComparedTo] = useState<Date | undefined>(undefined);
 
   return (
-    <Card className="w-[240px]">
+    <Card className={clsx(size == 'small' ? 'w-[240px]':'w-[400px]')}>
       <CardHeader className="p-2 flex flex-row space-x-3 items-center">
         <div className="flex-1">
           <CardDescription className="text-xs">Cashflows</CardDescription>

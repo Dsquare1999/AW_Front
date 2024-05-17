@@ -10,8 +10,6 @@
   top: 0;
 }
 
-
-
 .scrollingContent {
   animation: scroll-left 40s linear infinite; 
 }

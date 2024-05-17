@@ -9,19 +9,20 @@ import Image from "next/image";
 
 import Volume from "../Volume";
 import RateCurve from "../RateCurve";
+import clsx from "clsx";
 
-const HistoricPage = () => {
+const HistoricPage = ({ size = 'small' } : { size ?: 'small'|'medium'|'large'}) => {
   return (
     <Carousel
       opts={{
         align: "start",
       }}
       orientation="vertical"
-      className="w-[350px]"
+      className={clsx(size == 'small' ? "w-[350px]" : "w-[40vw]")}
     >
-      <CarouselContent className="h-[200px]">
+      <CarouselContent className={clsx(size == 'small' ? "h-[200px]" : "h-[250px]")}>
         <CarouselItem>
-          <div className="flex w-full">
+          <div className="flex">
             <Image
               alt="Image du drapeau"
               src="assets/image/countries/Ivory.svg"
@@ -46,10 +47,10 @@ const HistoricPage = () => {
           </div>
         </CarouselItem>
         <CarouselItem>
-          <Volume />
+          <Volume size={size}/>
         </CarouselItem>
         <CarouselItem>
-          <RateCurve />
+          <RateCurve size={size} />
         </CarouselItem>
       </CarouselContent>
     </Carousel>

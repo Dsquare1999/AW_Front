@@ -13,16 +13,17 @@ import {
   } from "@/data/spreads/RatesData";
   import { Line, LineProps } from "@/components/charts";
 import { RatesCurveData } from "@/data/spreads/RatesCurveData";
+import clsx from "clsx";
   
-  const RateCurve = () => {
+  const RateCurve = ({ size = 'small' } : { size ?: 'small'|'medium'|'large'}) => {
     return (
-      <Carousel className="w-[350px]">
+      <Carousel className={clsx(size == 'small' ? "w-[350px]" : "w-full")}>
         <CarouselContent>
           <CarouselItem>
-            <InfoTable headers={ratesHeaders} rows={ratesRows} />
+            <InfoTable headers={ratesHeaders} rows={ratesRows} size={size} />
           </CarouselItem>
           <CarouselItem>
-            <div className="h-[180px]">
+            <div className={clsx(size == 'small' ? "h-[180px]" : "h-[220px]")}>
               <Line
                 data={RatesCurveData() as LineProps}
                 title="Rates Curve"

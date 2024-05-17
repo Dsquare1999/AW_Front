@@ -19,6 +19,7 @@ import { ValorisationProp } from "@/app/types/BondType";
 import { ValorisationData } from "@/data/bonds/ValorisationData";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { useState } from "react";
+import clsx from "clsx";
 
 interface ValorisationViewProps {
   due_date: string;
@@ -26,12 +27,14 @@ interface ValorisationViewProps {
   valorisations: {
     [date: string]: ValorisationProp;
   };
+  size ?: 'small'|'medium'|'large'
 }
 
 const ValorisationView: React.FunctionComponent<ValorisationViewProps> = ({
   due_date,
   value_date,
   valorisations,
+  size = 'small'
 }) => {
   const [jump, setJump] = useState<string>("30");
   const [from, setFrom] = useState<Date>(new Date());
@@ -49,7 +52,7 @@ const ValorisationView: React.FunctionComponent<ValorisationViewProps> = ({
   const [comparedTo, setComparedTo] = useState<Date | undefined>(undefined);
 
   return (
-    <Card className="w-[240px]">
+    <Card className={clsx(size == 'small' ? 'w-[240px]':'w-[400px]')}>
       <CardHeader className="p-2 flex flex-row">
         <div className="flex-1">
           <CardDescription className="text-xs">Valorisations</CardDescription>

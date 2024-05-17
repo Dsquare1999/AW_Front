@@ -8,7 +8,7 @@ export const CouponData = () => {
             {
                 label: 'Coupon',
                 data: coupons,
-                backgroundColor: labels.map((label, index) => coupons[index] > 0 ? `rgba(203, 14, 14,1)`: `rgba(14, 203, 129,1)` ),
+                backgroundColor: labels.map((label, index) => coupons[index] > 0 ? `rgba(14, 203, 129,1)`: `rgba(203, 14, 14,1)` ),
             }
         ]
     }

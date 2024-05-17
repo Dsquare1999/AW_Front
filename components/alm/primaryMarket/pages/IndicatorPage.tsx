@@ -18,25 +18,26 @@ import {
 
 import PriceTrend from "../PriceTrend";
 import InfoTable from "../InfoTable";
+import clsx from "clsx";
 
-const IndicatorPage = () => {
+const IndicatorPage = ({ size = 'small' } : { size ?: 'small'|'medium'|'large'}) => {
   return (
     <Carousel
       opts={{
         align: "start",
       }}
       orientation="vertical"
-      className="w-[350px]"
+      className={clsx(size == 'small' ? "w-[350px]" : "w-full")}
     >
-      <CarouselContent className="h-[200px]">
+      <CarouselContent className={clsx(size == 'small' ? "h-[200px]" : "h-[250px]")}>
         <CarouselItem>
-          <PriceTrend />
+          <PriceTrend size={size} />
         </CarouselItem>
         <CarouselItem>
-          <InfoTable headers={indicatorHeaders} rows={indicatorRows} />
+          <InfoTable headers={indicatorHeaders} rows={indicatorRows} size={size}/>
         </CarouselItem>
         <CarouselItem>
-          <InfoTable headers={detailsHeaders} rows={detailsRows} />
+          <InfoTable headers={detailsHeaders} rows={detailsRows} size={size} />
         </CarouselItem>
       </CarouselContent>
       

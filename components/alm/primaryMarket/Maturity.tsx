@@ -1,9 +1,10 @@
 import { Bar, BarProps } from "@/components/charts";
 import { Progress } from "@/components/ui/progress";
 import { CouponData } from "@/data/spreads/CouponsData";
+import clsx from "clsx";
 import Image from "next/image";
 
-const Maturity = () => {
+const Maturity = ({ size = 'small' } : { size ?: 'small'|'medium'|'large'}) => {
   return (
     <article className="w-full">
       <div className="w-full flex items-center space-x-1">
@@ -34,7 +35,7 @@ const Maturity = () => {
         </aside>
       </div>
 
-      <div className="w-full max-h-[100px]">
+      <div className={clsx(size == 'small' ? "max-h-[100px]" : "max-h-[300px]", 'w-full')}>
         <Bar data={CouponData() as BarProps} title="Bond Drops over Maturity" />
       </div>
     </article>

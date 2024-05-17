@@ -1,9 +1,10 @@
 import { Line, LineProps } from "@/components/charts";
 import { Progress } from "@/components/ui/progress";
 import { PriceTrendData } from "@/data/spreads/PriceTrendData";
+import clsx from "clsx";
 import Image from "next/image";
 
-const PriceTrend = () => {
+const PriceTrend = ({ size = 'small' } : { size ?: 'small'|'medium'|'large'}) => {
   return (
     <article className="w-full">
       <div className="w-full flex items-center space-x-1">
@@ -34,7 +35,7 @@ const PriceTrend = () => {
         </aside>
       </div>
 
-      <div className="w-full max-h-[100px]">
+      <div className={clsx(size == 'small' ? "max-h-[100px]" : "max-h-[300px]", 'w-full')}>
         <Line data={PriceTrendData() as LineProps} title="Bond Price Trends" />
       </div>
     </article>

@@ -20,6 +20,7 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { DurationData } from "@/data/bonds/DurationData";
 import { DurationEncoursData } from "@/data/bonds/DurationEncoursData";
 import { useState } from "react";
+import clsx from "clsx";
 
 interface DurationViewProps {
   due_date: string;
@@ -27,12 +28,14 @@ interface DurationViewProps {
   durations: {
     [date: string]: DurationProp;
   };
+  size ?: 'small'|'medium'|'large'
 }
 
 const DurationView: React.FunctionComponent<DurationViewProps> = ({
   due_date,
   value_date,
   durations,
+  size = 'small'
 }) => {
   const [jump, setJump] = useState<string>("30");
   const [from, setFrom] = useState<Date>(new Date());
@@ -87,7 +90,7 @@ const DurationView: React.FunctionComponent<DurationViewProps> = ({
         </div>
       </div>
       <div className="flex flex-row space-x-2">
-          <Card className="w-[240px]">
+          <Card className={clsx(size == 'small' ? 'w-[240px]':'w-[400px]')}>
             <CardHeader className="p-2">
               <CardDescription className="text-xs">Duration</CardDescription>
               <div className="flex justify-between items-center">
@@ -141,7 +144,7 @@ const DurationView: React.FunctionComponent<DurationViewProps> = ({
               )}
             </CardContent>
           </Card>
-          <Card className="w-[240px]">
+          <Card className={clsx(size == 'small' ? 'w-[240px]':'w-[400px]')}>
             <CardHeader className="p-2">
               <CardDescription className="text-xs">
                 Duration * Outstanding

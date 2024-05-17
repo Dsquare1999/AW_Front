@@ -13,16 +13,17 @@ import {
 } from "@/data/spreads/VolumeData";
 import { Pie, PieProps, Polar, Radar, RadarProps } from "@/components/charts";
 import { ProportionData, AmountData } from "@/data/spreads/ProportionsData";
+import clsx from "clsx";
 
-const Volume = () => {
+const Volume = ({ size = 'small' } : { size ?: 'small'|'medium'|'large'}) => {
   return (
-    <Carousel className="w-[350px]">
+    <Carousel className={clsx(size == 'small' ? "w-[350px]" : "w-full")}>
       <CarouselContent>
         <CarouselItem>
-          <InfoTable headers={volumeHeaders} rows={volumeRows} />
+          <InfoTable headers={volumeHeaders} rows={volumeRows} size={size} />
         </CarouselItem>
         <CarouselItem>
-          <div className="h-[180px]">
+          <div className={clsx(size == 'small' ? "h-[180px]" : "h-[220px]")}>
             <Polar
               data={AmountData() as RadarProps}
               title="Bond Volume Amounts"
@@ -30,7 +31,7 @@ const Volume = () => {
           </div>
         </CarouselItem>
         <CarouselItem>
-          <div className="h-[180px]">
+          <div className={clsx(size == 'small' ? "h-[180px]" : "h-[220px]")}>
             <Pie
               data={ProportionData() as PieProps}
               title="Bond Volume Proportions"

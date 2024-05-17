@@ -36,8 +36,8 @@ interface BondPortofolioPageProps {
   bonds: BondProp[];
 }
 
-const BondAccordionContent = ({ bond }: { bond: BondProp }) => (
-  <Carousel className="max-w-[490px]">
+export const BondAccordionContent = ({ bond, size = 'small' }: { bond: BondProp, size ?: 'small'|'medium'|'large' }) => (
+  <Carousel className={clsx(size == 'small' ? 'max-w-[490px]':'max-w-[800px]')}>
     <CarouselContent>
       <CarouselItem>
         <div className="w-full flex space-x-2">
@@ -45,11 +45,13 @@ const BondAccordionContent = ({ bond }: { bond: BondProp }) => (
             cashflows={bond.cashflows}
             due_date={bond.due_date}
             value_date={bond.value_date}
+            size={size}
           />
           <ValorisationView
             valorisations={bond.valorisations}
             due_date={bond.due_date}
             value_date={bond.value_date}
+            size={size}
           />
         </div>
       </CarouselItem>
@@ -58,6 +60,7 @@ const BondAccordionContent = ({ bond }: { bond: BondProp }) => (
           durations={bond.duration_macaulay}
           due_date={bond.due_date}
           value_date={bond.value_date}
+          size={size}
         />
       </CarouselItem>
       <CarouselItem>
@@ -74,7 +77,6 @@ const BondAccordionContent = ({ bond }: { bond: BondProp }) => (
 );
 
 const BondPortofolioPage = ({ bonds }: BondPortofolioPageProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [choosenBond, setChoosenBond] = useState<BondProp | null>(null);
   return (
     <Section

@@ -4,9 +4,9 @@ import IndicatorPage from "../../primaryMarket/pages/IndicatorPage";
 import HistoricPage from "../../primaryMarket/pages/HistoricPage";
 
 
-const BondDetailPage = () => {
+const BondDetailPage = ({ opened = false, size = 'small' } : { opened ?: boolean; size ?: 'small'|'medium'|'large'}) => {
   return (
-    <Tabs className="w-full">
+    <Tabs defaultValue={opened? 'emission' : ''} className="w-full">
       <TabsList className="w-full flex">
         <TabsTrigger className="flex-1" value="emission">
           Emission
@@ -19,13 +19,13 @@ const BondDetailPage = () => {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="emission">
-        <EmissionPage />
+        <EmissionPage size={size} />
       </TabsContent>
       <TabsContent value="indicateur">
-        <IndicatorPage />
+        <IndicatorPage size={size} />
       </TabsContent>
       <TabsContent value="historique">
-        <HistoricPage />
+        <HistoricPage size={size} />
       </TabsContent>
     </Tabs>
   );
