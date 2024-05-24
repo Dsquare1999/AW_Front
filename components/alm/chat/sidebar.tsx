@@ -13,7 +13,8 @@ import {
 import { Avatar, AvatarImage } from "../../ui/avatar";
 import { Message } from "@/data/chats";
 import clsx from "clsx";
-import { RoomType, UserType } from "@/app/types/ChatType";
+import { RoomType } from "@/app/types/ChatType";
+import { UserType } from "@/app/types/UserType";
 import { useRetrieveRoomsQuery } from "@/redux/features/retrieveApiSlice";
 
 interface SidebarProps {

@@ -1,5 +1,7 @@
 import { apiSlice } from "../services/apiSlice";
-import { RoomType, UserType } from "@/app/types/ChatType";
+import { RoomType } from "@/app/types/ChatType";
+import { RoomType as GPTRoomType } from "@/app/types/GPTType";
+import { UserType } from "@/app/types/UserType";
 import { AdminBondType } from "@/app/types/AdminBondType";
 import { BondProp } from "@/app/types/BondType";
 
@@ -44,6 +46,10 @@ const retrieveApiSlice = apiSlice.injectEndpoints({
         retrieveRoomMessages: builder.query<any, string>({
             query: (room_id: string) => `/rooms/${room_id}/messages/`,
         }),
+        // GPT 
+        retrieveGPTRooms: builder.query<GPTRoomType[], void>({
+            query:() => '/gpt-rooms/'
+        }),
     })
 })
 
@@ -58,5 +64,6 @@ export const {
     useRetrieveSwapOperationsQuery,
     useRetrieveSwapPropositionsQuery,
     useRetrieveRoomsQuery,
-    useRetrieveRoomMessagesQuery
+    useRetrieveRoomMessagesQuery,
+    useRetrieveGPTRoomsQuery
 } = retrieveApiSlice

@@ -1,14 +1,14 @@
 import React from "react";
 import { Avatar, AvatarImage } from "../../ui/avatar";
-import { UserData } from "@/data/chats";
 import { Info, Phone, Video } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../../ui/button";
 import { RoomType } from "@/app/types/ChatType";
+import { RoomType as GPTRoomType } from "@/app/types/GPTType";
 
 interface ChatTopbarProps {
-  selectedRoom: RoomType;
+  selectedRoom: RoomType | GPTRoomType;
 }
 
 // export const TopbarIcons = [{ icon: Phone }, { icon: Video }, { icon: Info }];
@@ -29,7 +29,7 @@ export default function ChatTopbar({ selectedRoom }: ChatTopbarProps) {
         </Avatar>
         <div className="flex flex-col">
           <span className="font-medium text-xs ">{selectedRoom.name}</span>
-          <span className="text-[10px]">Active 2 mins ago</span>
+          <span className="text-[10px]">Active now</span>
         </div>
       </div>
 

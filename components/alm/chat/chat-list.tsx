@@ -3,14 +3,17 @@ import React, { useRef } from "react";
 import { Avatar, AvatarImage } from "../../ui/avatar";
 import ChatBottombar from "./chat-bottombar";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageType, RoomType, UserType } from "@/app/types/ChatType";
+import { MessageType, RoomType } from "@/app/types/ChatType";
+import { UserType } from "@/app/types/UserType";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ChatListProps {
   messages?: MessageType[];
   selectedRoom: RoomType;
   sendMessage: (newMessage: MessageType, me: UserType) => void;
   me: UserType;
-  isMobile: boolean;
+  isMobile?: boolean;
+  isPrompted?: boolean;
 }
 
 export function ChatList({
@@ -18,10 +21,12 @@ export function ChatList({
   selectedRoom,
   sendMessage,
   me,
-  isMobile
+  isMobile,
+  isPrompted
 }: ChatListProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
+  
   React.useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
@@ -31,9 +36,9 @@ export function ChatList({
 
   return (
     <div className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col">
-      <div
+      <ScrollArea
         ref={messagesContainerRef}
-        className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col"
+        className="w-full overflow-y-auto overflow-x-hidden max-h-[30vh] flex flex-col"
       >
         <AnimatePresence>
           {messages?.map((message, index) => (
@@ -57,11 +62,11 @@ export function ChatList({
               }}
               className={cn(
                 "flex flex-col gap-2 p-4 whitespace-pre-wrap",
-                message.user.first_name !== selectedRoom.name ? "items-end" : "items-start"
+                message.user.first_name !== me.first_name ? "items-end" : "items-start"
               )}
             >
               <div className="flex gap-3 items-center">
-                {message.user.first_name === selectedRoom.name && (
+                {message.user.first_name === me.first_name && (
                   <Avatar className="flex justify-center items-center">
                     <AvatarImage
                       src={'/User1.png'}
@@ -74,7 +79,7 @@ export function ChatList({
                 <span className=" bg-accent p-3 rounded-md max-w-xs text-xs">
                   {message.content}
                 </span>
-                {message.user.first_name !== selectedRoom.name && (
+                {message.user.first_name !== me.first_name && (
                   <Avatar className="flex justify-center items-center">
                     <AvatarImage
                       src={'/User1.png'}
@@ -88,8 +93,8 @@ export function ChatList({
             </motion.div>
           ))}
         </AnimatePresence>
-      </div>
-      <ChatBottombar sendMessage={sendMessage} selectedRoom={selectedRoom} me={me} isMobile={isMobile}/>
+      </ScrollArea>
+      <ChatBottombar sendMessage={sendMessage} selectedRoom={selectedRoom} me={me} isMobile={isMobile} isPrompted={isPrompted}/>
     </div>
   );
 }

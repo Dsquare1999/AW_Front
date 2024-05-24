@@ -15,7 +15,8 @@ import {
   useRetrieveRoomsQuery,
   useRetrieveMeQuery,
 } from "@/redux/features/retrieveApiSlice";
-import { RoomType, UserType, DefaultALMUser } from "@/app/types/ChatType";
+import { RoomType, DefaultALMUser } from "@/app/types/ChatType";
+import { UserType } from "@/app/types/UserType";
 
 interface ChatLayoutProps {
   defaultLayout: number[] | undefined;

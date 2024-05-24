@@ -15,13 +15,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Textarea } from "../../ui/textarea";
 import { EmojiPicker } from "./emoji-picker";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
-import { MessageType, RoomType, UserType } from "@/app/types/ChatType";
+import { MessageType, RoomType } from "@/app/types/ChatType";
+import { UserType } from "@/app/types/UserType";
 
 interface ChatBottombarProps {
   sendMessage: (newMessage: MessageType, me: UserType) => void;
   selectedRoom: RoomType;
   me: UserType;
-  isMobile: boolean;
+  isMobile?: boolean;
+  isPrompted?: boolean;
 }
 
 // export const BottombarIcons = [{ icon: FileImage }, { icon: Paperclip }];
@@ -32,6 +34,7 @@ export default function ChatBottombar({
   selectedRoom,
   me,
   isMobile,
+  isPrompted
 }: ChatBottombarProps) {
   const [message, setMessage] = useState<string>("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -46,6 +49,7 @@ export default function ChatBottombar({
       user: me,
       room: selectedRoom.id,
       read_by: [me.id],
+      isPrompted: isPrompted,
     };
     sendMessage(newMessage, me);
     setMessage("");
@@ -58,6 +62,8 @@ export default function ChatBottombar({
         user: me,
         room: selectedRoom.id,
         read_by: [me.id],
+        isPrompted: isPrompted,
+
       };
       sendMessage(newMessage, me);
       setMessage("");

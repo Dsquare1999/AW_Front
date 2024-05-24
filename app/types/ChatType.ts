@@ -1,3 +1,4 @@
+import { UserType } from './UserType';
 
 export type MessageType = {
     content: string;
@@ -5,22 +6,16 @@ export type MessageType = {
     user : UserType;
     read_by : number[];
     created_at ?: string;
-}
-
-export type UserType = {
-    email : string;
-    first_name : string;
-    last_name : string;
-    id : number;
+    isPrompted ?: boolean;
 }
 
 export const DefaultALMUser : UserType = {
     email : 'alm@algoway.com',
-    first_name : 'AlgoWay',
-    last_name : 'Africa',
-    id : 0
+    first_name : 'Algo',
+    last_name : 'Friend',
+    id : 0,
+    is_staff : true
 }
-
 
 export type RoomType = {
     id : string;

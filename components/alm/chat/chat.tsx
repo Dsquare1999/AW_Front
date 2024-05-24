@@ -2,7 +2,9 @@ import { Message, UserData } from "@/data/chats";
 import ChatTopbar from "./chat-topbar";
 import { ChatList } from "./chat-list";
 import React, { useEffect } from "react";
-import { MessageType, RoomType, UserType } from "@/app/types/ChatType";
+import { MessageType, RoomType } from "@/app/types/ChatType";
+import { UserType } from "@/app/types/UserType";
+import { DefaultALMUser } from "@/app/types/ChatType";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
 interface ChatProps {
@@ -15,6 +17,9 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
   const [realTimeMessages, setRealTimeMessages] = React.useState<MessageType[]>(
     selectedRoom?.messages ?? []
   );
+
+  const isPrompted = selectedRoom?.participants?.some((participant) => participant.is_staff) || false;
+
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
     "ws://localhost:8000/ws/" + selectedRoom.id + "/",
     {
@@ -25,8 +30,10 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
 
   useEffect(() => {
     console.log("Connection state changed", readyState);
+    console.log("Users : ", selectedRoom.participants);
+    console.log("Is Prompted : ", isPrompted);
     setRealTimeMessages(selectedRoom?.messages ?? []);
-  }, [readyState, selectedRoom]);
+  }, [readyState, selectedRoom, isPrompted]);
 
   useEffect(() => {
     if (
@@ -53,6 +60,12 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
       event: "chat_message",
       data: newMessage,
     });
+    isPrompted && (
+      sendJsonMessage({
+        event: "gpt_message",
+        data: newMessage,
+      })
+    )
   };
 
   return (
@@ -65,6 +78,7 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
         sendMessage={sendMessage}
         isMobile={isMobile}
         me={me}
+        isPrompted = {isPrompted}
       />
     </div>
   );
