@@ -60,12 +60,6 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
       event: "chat_message",
       data: newMessage,
     });
-    isPrompted && (
-      sendJsonMessage({
-        event: "gpt_message",
-        data: newMessage,
-      })
-    )
   };
 
   return (

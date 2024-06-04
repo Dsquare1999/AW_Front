@@ -6,6 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MessageType, RoomType } from "@/app/types/ChatType";
 import { UserType } from "@/app/types/UserType";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import InlineMath  from 'katex';
+
 
 interface ChatListProps {
   messages?: MessageType[];
@@ -62,11 +64,11 @@ export function ChatList({
               }}
               className={cn(
                 "flex flex-col gap-2 p-4 whitespace-pre-wrap",
-                message.user.first_name !== me.first_name ? "items-end" : "items-start"
+                message.user.email !== me.email ? "items-start" : "items-end"
               )}
             >
               <div className="flex gap-3 items-center">
-                {message.user.first_name === me.first_name && (
+                {message.user.email !== me.email && (
                   <Avatar className="flex justify-center items-center">
                     <AvatarImage
                       src={'/User1.png'}
@@ -79,7 +81,7 @@ export function ChatList({
                 <span className=" bg-accent p-3 rounded-md max-w-xs text-xs">
                   {message.content}
                 </span>
-                {message.user.first_name !== me.first_name && (
+                {message.user.email === me.email && (
                   <Avatar className="flex justify-center items-center">
                     <AvatarImage
                       src={'/User1.png'}
