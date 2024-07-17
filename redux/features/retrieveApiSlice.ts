@@ -2,7 +2,10 @@ import { apiSlice } from "../services/apiSlice";
 import { RoomType } from "@/app/types/ChatType";
 import { UserType } from "@/app/types/UserType";
 import { AdminBondType } from "@/app/types/AdminBondType";
-import { BondProp } from "@/app/types/BondType";
+import { BondPortofolioPageProps, BondProp } from "@/app/types/BondType";
+import { BilanProps } from "@/app/types/BilanType";
+import { PropositionType as SpreadPropositionType, SpreadType } from "@/app/types/SpreadType";
+import { PropositionType as SwapPropositionType, SwapType } from "@/app/types/SwapType";
 
 const retrieveApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -17,25 +20,25 @@ const retrieveApiSlice = apiSlice.injectEndpoints({
         retrieveBond : builder.query<BondProp[], void>({
             query: () => '/bond/'
         }),
-        retrieveBondPortofolio: builder.query<any, void>({
+        retrieveBondPortofolio: builder.query<BondPortofolioPageProps[], void>({
             query: () => '/bond_portofolio/'
         }),
-        retrieveBilan: builder.query<any, void>({
+        retrieveBilan: builder.query<BilanProps[], void>({
             query:() => '/bilan/'
         }),
 
         // Spread
-        retrieveSpreadOperations: builder.query<any, void>({
+        retrieveSpreadOperations: builder.query<SpreadType[], void>({
             query:() => '/spread_operations/'
         }),
-        retrieveSpreadPropositions: builder.query<any, void>({
+        retrieveSpreadPropositions: builder.query<SpreadPropositionType[], void>({
             query:() => '/spread_propositions/'
         }),
         // Swap
-        retrieveSwapOperations: builder.query<any, void>({
+        retrieveSwapOperations: builder.query<SwapType[], void>({
             query:() => '/swap_operations/'
         }),
-        retrieveSwapPropositions: builder.query<any, void>({
+        retrieveSwapPropositions: builder.query<SwapPropositionType[], void>({
             query:() => '/swap_propositions/'
         }),
         // Chat

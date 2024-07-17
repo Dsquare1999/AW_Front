@@ -6,6 +6,14 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  ContextMenuShortcut,
+} from "@/components/ui/context-menu";
+import { Reorder } from "framer-motion";
 
 import styles from "@/components/styles/alm.module.css";
 import { cn } from "@/lib/utils";
@@ -13,9 +21,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 
-import { useRetrieveBilanQuery, useRetrieveSpreadOperationsQuery, useRetrieveSwapOperationsQuery } from "@/redux/features/retrieveApiSlice";
+import {
+  useRetrieveBilanQuery,
+  useRetrieveSpreadOperationsQuery,
+  useRetrieveSwapOperationsQuery,
+} from "@/redux/features/retrieveApiSlice";
 import BondPortofolioPage from "@/components/alm/bonds/pages/BondPortofolioPage";
-import { BondProp } from "../types/BondType";
+import { BondProp, BondPortofolioPageProps } from "../types/BondType";
 import DisplayBondPortofolio from "@/components/alm/bonds/pages/DisplayBondPortofolio";
 import BilanPage from "@/components/alm/bonds/pages/BilanPage";
 import Sidebar from "@/components/common/Sidebar";
@@ -25,6 +37,91 @@ import SwapPage from "@/components/alm/swaps/pages/SwapPage";
 import { SpreadType } from "../types/SpreadType";
 import { SwapType } from "../types/SwapType";
 import AlmFooter from "@/components/alm/AlmFooter";
+import { BilanProps } from "../types/BilanType";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "@hello-pangea/dnd";
+
+const ALMComponent = ({ item }: { item: string }) => {
+  // ALM States
+  const [activeBilan, setActiveBilan] = useState<BilanProps | undefined>(undefined);
+  const [activePortofolio, setActivePortofolio] = useState<BondPortofolioPageProps | undefined>(undefined);
+  const {
+    data: bilans,
+    isLoading: isBondLoading,
+    isFetching: isBondFetching,
+  } = useRetrieveBilanQuery();
+
+  const {
+    data: spreads,
+    isLoading: isSpreadLoading,
+    isFetching: isSpreadFetching,
+  } = useRetrieveSpreadOperationsQuery();
+
+  const {
+    data: swaps,
+    isLoading: isSwapLoading,
+    isFetching: isSwapFetching,
+  } = useRetrieveSwapOperationsQuery();
+
+  useEffect(() => {
+    bilans
+      ? setActiveBilan(bilans.find((bilan) => bilan.is_active))
+      : setActiveBilan(undefined);
+    activeBilan
+      ? setActivePortofolio(
+          activeBilan.bondPortofolios.find((portofolio) => portofolio.is_active)
+        )
+      : setActivePortofolio(undefined);
+  }, [activeBilan, bilans]);
+
+  return (
+    <>
+      {item === "0" && (
+        <section className="flex flex-col">
+          <BondPortofolioPage
+            bonds={activePortofolio ? activePortofolio.bonds : []}
+          />
+        </section>
+      )}
+      {item === "1" && (
+        <section className="flex flex-col">
+          <DisplayBondPortofolio
+            portofolios={activeBilan ? activeBilan.bondPortofolios : []}
+            bonds={activePortofolio ? activePortofolio.bonds : []}
+          />
+        </section>
+      )}
+
+      {item === "2" && (
+        <section className="">
+          <SpreadPage spreads={spreads} />
+        </section>
+      )}
+      {item === "3" && (
+        <section className="">
+          <SwapPage
+            bonds={activePortofolio ? activePortofolio.bonds : []}
+            swaps={swaps}
+          />
+        </section>
+      )}
+      {item === "4" && (
+        <section className="">
+          <BilanPage />
+        </section>
+      )}
+      {item === "5" && (
+        <section className="">
+          <ChatContainer collapsedSidebar={true} />
+        </section>
+      )}
+    </>
+  );
+};
 
 const ALMPage = () => {
   // Authentication redirection
@@ -37,59 +134,32 @@ const ALMPage = () => {
   }, [isAuthenticated, router]);
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
-  // ALM States
-  const [bonds, setBonds] = useState<BondProp[]>([]);
-  const {
-    data: myBilan,
-    isLoading: isBondLoading,
-    isFetching: isBondFetching,
-  } = useRetrieveBilanQuery();
+  const [items, setItems] = useState<string[]>(["0", "1", "2", "3", "4", "5"]);
+  const [isDragEnabled, setIsDragEnabled] = useState(true);
 
-  const [spreads, setSpreads] = useState<SpreadType[]>([]);
-  const {
-    data: mySpreads,
-    isLoading: isSpreadLoading,
-    isFetching: isSpreadFetching,
-  } = useRetrieveSpreadOperationsQuery();
+  const handleDragStartWindows = () => {};
 
-  const [swaps, setSwaps] = useState<SwapType[]>([]);
-  const {
-    data: mySwaps,
-    isLoading: isSwapLoading,
-    isFetching: isSwapFetching,
-  } = useRetrieveSwapOperationsQuery();
-  
+  const handleDragEndWindow = (result: DropResult) => {
+    if (!result.destination) return;
+    const draggedItems = Array.from(items);
+    const [reorderedItem] = draggedItems.splice(result.source.index, 1);
+    draggedItems.splice(result.destination.index, 0, reorderedItem);
+    setItems(draggedItems);
+  };
 
   useEffect(() => {
-    if (
-      myBilan &&
-      myBilan.length > 0 &&
-      myBilan[0].bondPortofolios &&
-      myBilan[0].bondPortofolios.length > 0 &&
-      myBilan[0].bondPortofolios[0].bonds
-    ) {
-      const myBonds = myBilan[0].bondPortofolios[0].bonds;
-      setBonds(myBonds);
-      console.log("My bonds", myBonds);
-    } else {
-      console.log("No Bond found !");
-    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "m" && event.ctrlKey) {
+        // Raccourci Ctrl+D
+        setIsDragEnabled(!isDragEnabled);
+      }
+    };
 
-    if (mySpreads && mySpreads.length > 0) {
-      console.log("My spreads", mySpreads);
-      setSpreads(mySpreads);
-    } else {
-      console.log("No Spread found !");
-    }
-
-    if (mySwaps && mySwaps.length > 0) {
-      console.log("My swaps", mySwaps);
-      setSwaps(mySwaps);
-    } else {
-      console.log("No Swap found !");
-    }
-  }, [myBilan, mySpreads, mySwaps]);
-
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isDragEnabled]);
 
   return (
     <div
@@ -105,51 +175,71 @@ const ALMPage = () => {
       >
         <AuthNavBar />
       </div>
-      <main className="h-[100vh] overflow-hidden flex space-x-2 justify-items-center border pt-5">
-        <Sidebar />
-        <section className="flex flex-col">
-          <ResizablePanelGroup
-            direction="vertical"
-            className="min-h-[90vh] w-full rounded-lg border p-2"
+
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <main className="h-[100dvh] overflow-hidden flex justify-items-center border">
+            {/* <Sidebar /> */}
+            {isDragEnabled ? (
+              <DragDropContext
+                onDragStart={handleDragStartWindows}
+                onDragEnd={handleDragEndWindow}
+              >
+                <Droppable droppableId="droppable">
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      className="flex gap-0 flex-wrap h-full w-full"
+                    >
+                      {items.map((item, itemIndex) => (
+                        <Draggable key={item} draggableId={item} index={itemIndex}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <ALMComponent item={item} />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            ) : (
+              <div className="flex flex-wrap justify-items-center">
+                {items.map((item) => (
+                  <div key={item}>
+                    <ALMComponent item={item} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </main>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-64">
+          <ContextMenuItem inset>
+            Back
+            <ContextMenuShortcut>Ctrl + b</ContextMenuShortcut>
+          </ContextMenuItem>
+          <ContextMenuItem
+            inset
+            onClick={() => setIsDragEnabled(!isDragEnabled)}
           >
-            <ResizablePanel defaultSize={48}>
-              <BondPortofolioPage bonds={bonds} />
-            </ResizablePanel>
-            <ResizableHandle withHandle className="my-4" />
-            <ResizablePanel defaultSize={48}>
-              <DisplayBondPortofolio bonds={bonds} />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </section>
-        <section className="">
-          <ResizablePanelGroup
-            direction="vertical"
-            className="min-h-[90vh] w-full rounded-lg border p-2"
-          >
-            <ResizablePanel defaultSize={48}>
-              <SpreadPage spreads={spreads} />
-            </ResizablePanel>
-            <ResizableHandle withHandle className="my-4" />
-            <ResizablePanel defaultSize={48}>
-              <SwapPage bonds={bonds} swaps={swaps} />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </section>
-        <section className="">
-          <ResizablePanelGroup
-            direction="vertical"
-            className="min-h-[90vh] w-full rounded-lg border p-2"
-          >
-            <ResizablePanel defaultSize={48}>
-              <BilanPage />
-            </ResizablePanel>
-            <ResizableHandle withHandle className="my-4" />
-            <ResizablePanel defaultSize={48}>
-              <ChatContainer collapsedSidebar={true} />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </section>
-      </main>
+            {isDragEnabled ? "Disable Drag-and-Drop" : "Enable Drag-and-Drop"}
+            <ContextMenuShortcut>Ctrl + m</ContextMenuShortcut>
+          </ContextMenuItem>
+          <ContextMenuItem>
+            Reload
+            <ContextMenuShortcut>⌘R</ContextMenuShortcut>
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+
       <AlmFooter />
     </div>
   );

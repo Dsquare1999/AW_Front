@@ -4,4 +4,5 @@ export type UserType = {
     last_name : string;
     id : number;
     is_staff : boolean;
+    profile : string;
 }

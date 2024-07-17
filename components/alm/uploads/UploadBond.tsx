@@ -37,7 +37,13 @@ import axios from "axios";
 
 import { AdminBondFieldName } from "@/schemas/AdminBondSchema";
 import { useRetrieveAdminBondQuery } from "@/redux/features/retrieveApiSlice";
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import AddBondManually from "../bonds/AddBondManually";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface RowData {
   rowId: string;
@@ -58,15 +64,25 @@ interface DataTableProps {
   fileName: string;
   sheets: SheetsProps[];
 }
+type endpointProps =
+  | "backoffice"
+  | "bond"
+  | "customer_loan"
+  | "eib"
+  | "pib"
+  | "dat"
+  | "refi"
+  | "op_injection"
+  | "op_retrait";
 
 interface UploadProps {
-  endpoint?: string;
+  endpoint?: endpointProps;
   isAdmin: boolean;
   title?: string;
   previsualize: (
     dataTableData: DataTableProps[],
     rejectedDataTableData: DataTableProps[],
-    endpoint: string | undefined,
+    endpoint: endpointProps | undefined,
     isAdmin: boolean
   ) => void;
 }
@@ -74,7 +90,6 @@ interface UploadProps {
 const formSchema = z.object({
   file: z.string().optional(),
 });
-
 export default function UploadBond({
   endpoint,
   isAdmin,
@@ -86,9 +101,7 @@ export default function UploadBond({
   });
 
   // ---------------- Isins --------------------------------------------
-  const {
-    data: adminBonds
-  } = useRetrieveAdminBondQuery();
+  const { data: adminBonds } = useRetrieveAdminBondQuery();
 
   // ---------------- States -------------------------------------------
   const [isins, setIsins] = useState<string[]>([]);
@@ -295,7 +308,8 @@ export default function UploadBond({
               });
             } else {
               if (isSheetNameAccepted(workSheetName).status) {
-                const endpoint = isSheetNameAccepted(workSheetName).acceptedSheetName;
+                const endpoint =
+                  isSheetNameAccepted(workSheetName).acceptedSheetName;
 
                 thisSheetRows.forEach((row) => {
                   if (!isValidRow(row).status) {
@@ -442,6 +456,24 @@ export default function UploadBond({
                       to upload
                     </p>
                     <p className="text-[9px] text-black">Allowed files: xlsx</p>
+                    <div className="text-[9px] text-black mr-2">
+                      or
+                      
+                      <Dialog>
+                        <DialogTrigger className="mb-2">
+                          <Button size="sm">Add manually</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>{title ? title : "Upload Portofolios"}</DialogTitle>
+                          </DialogHeader>
+                              <AddBondManually
+                                endpoint={endpoint}
+                                isAdmin={isAdmin}
+                              />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                     <FormControl>
                       <input
                         placeholder="fileInput"
@@ -450,7 +482,7 @@ export default function UploadBond({
                         type="file"
                         multiple={true}
                         onChange={handleChange}
-                        accept=".xlsx, .xlsm, .xls, image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf"
+                        accept=".xlsx, .xlsm, .xls"
                       />
                     </FormControl>
                     <div className="flex flex-col items-center p-2">

@@ -3,9 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import UploadBond from "./UploadBond";
 import { Button } from "../../ui/button";
-import { DispalyTable } from "./datatable/DisplayTable";
-
-import axios from "axios";
+import { DisplayTable } from "./datatable/DisplayTable";
 
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { IoCloudUploadOutline } from "react-icons/io5";
@@ -16,8 +14,6 @@ import {
   useBackofficeMutation,
 } from "@/redux/features/uploadApiSlice";
 import { toast } from "react-toastify";
-
-import { AdminBondSchema, BondSchema } from "@/schemas";
 
 interface RowData {
   rowId: string;
@@ -43,14 +39,25 @@ interface UploadBondPageProps {
   isAdminPage?: boolean;
 }
 
-type endpointProps = "backoffice" | "bond";
+type endpointProps = "backoffice" | "bond" | "customer_loan" | "eib" | "pib" | "dat" | "refi" | "op_injection" | "op_retrait";
+
+const portfolioTypes : {endpoint?: endpointProps; title: string }[] = [
+  { endpoint: "bond", title: "Bond Portfolio" },
+  { endpoint: "customer_loan", title: "Customer Loans Portfolio" },
+  { endpoint: "eib", title: "EIB Portfolio" },
+  { endpoint: "pib", title: "PIB Portfolio" },
+  { endpoint: "dat", title: "DAT Portfolio" },
+  { endpoint: "refi", title: "Refi Portfolio" },
+  { endpoint: "op_injection", title: "OP Injection Portfolio" },
+  { endpoint: "op_retrait", title: "OP Retrait Portfolio" },
+];
 
 const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(
     isAdminPage ? isAdminPage : false
   );
   const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
-  const [endpoint, setEndpoint] = useState<string | undefined>("");
+  const [endpoint, setEndpoint] = useState<endpointProps | undefined>(undefined);
   const [dataTableData, setDataTableData] = useState<DataTableProps[]>([]);
   const [rejectedDataTableData, setRejectedDataTableData] = useState<
     DataTableProps[]
@@ -61,21 +68,15 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
 
   const changeDisplaying = useCallback(() => {
     setIsDisplayed((prevIsDisplayed) => !prevIsDisplayed);
-  }, [setIsDisplayed]);
+  }, []);
 
   const previsualizeData = useCallback(
     (
       receivedDataTableData: DataTableProps[],
       receivedRejectedDataTableData: DataTableProps[],
-      receivedEndpoint: string | undefined,
+      receivedEndpoint: endpointProps | undefined,
       receivedIsAdmin: boolean
     ) => {
-      console.log("ReceivedDataTableData", receivedDataTableData);
-      console.log(
-        "RejectedReceivedDataTableData",
-        receivedRejectedDataTableData
-      );
-
       setIsAdmin(receivedIsAdmin);
       setEndpoint(receivedEndpoint);
       setDataTableData(receivedDataTableData);
@@ -85,7 +86,6 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
     [changeDisplaying]
   );
 
-  // A revoir
   const updateData = (
     receivedDataTableData: DataTableProps[],
     receivedRejectedDataTableData: DataTableProps[]
@@ -94,18 +94,13 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
     setRejectedDataTableData(receivedRejectedDataTableData);
   };
 
-  useEffect(() => {
-    if (isDisplayed) {
-    }
-  }, [isDisplayed]);
-
-  // ------------------- Sumbmit function -----------------------------------------------
+  useEffect(() => {}, [isDisplayed]);
 
   const submitBonds = async () => {
     let submitEndpoint = "";
-    dataTableData.map((dataTable: DataTableProps) => {
+    dataTableData.forEach((dataTable: DataTableProps) => {
       if (dataTable.sheets && dataTable.sheets.length > 0) {
-        dataTable.sheets.map((sheet) => {
+        dataTable.sheets.forEach((sheet) => {
           try {
             if (!isAdmin) {
               submitEndpoint = endpoint
@@ -117,7 +112,7 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
               submitEndpoint = "backoffice";
             }
 
-            sheet.rows.map(async (row) => {
+            sheet.rows.forEach(async (row) => {
               await upload(submitEndpoint as endpointProps, row);
             });
           } catch (error) {
@@ -129,31 +124,27 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
   };
 
   const upload = async (endpoint: endpointProps, row: any) => {
-    endpoint === "bond"
-      ? bond(row)
-          .unwrap()
-          .then((res: any) => {
-            toast.success("Bond Successful Upload");
-          })
-          .catch((error: any) => {
-            toast.error("Error Uploading Bond");
-          })
-      : endpoint === "backoffice"
-      ? backoffice(row)
-          .unwrap()
-          .then((res: any) => {
-            toast.success("Admin Bond Successful Upload");
-          })
-          .catch((error: any) => {
-            toast.error("Error Uploading Bond");
-          })
-      : null;
+    if (endpoint === "bond") {
+      try {
+        await bond(row).unwrap();
+        toast.success("Bond Successful Upload");
+      } catch {
+        toast.error("Error Uploading Bond");
+      }
+    } else if (endpoint === "backoffice") {
+      try {
+        await backoffice(row).unwrap();
+        toast.success("Admin Bond Successful Upload");
+      } catch {
+        toast.error("Error Uploading Bond");
+      }
+    }
   };
 
   return (
     <div>
       {isDisplayed ? (
-        <div className="">
+        <ScrollArea className="h-[90vh]">
           <div className="flex justify-end items-center space-x-2 mb-4">
             <Button type="button" onClick={changeDisplaying}>
               <span className="mr-2 w-4 h-4">
@@ -168,7 +159,7 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
               Upload Bonds
             </Button>
           </div>
-          <DispalyTable
+          <DisplayTable
             FilesDataTables={dataTableData}
             RejectedFilesDataTables={rejectedDataTableData}
             endpoint={endpoint}
@@ -177,8 +168,7 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
               updateData(dataTableData, rejectedDataTableData)
             }
           />
-          {/* <ScrollBar orientation="horizontal" /> */}
-        </div>
+        </ScrollArea>
       ) : (
         <div className="h-full w-full p-1">
           <div className="grid grid-cols-5">
@@ -200,166 +190,28 @@ const UploadBondPage = ({ isAdminPage }: UploadBondPageProps) => {
                 }
               />
             </div>
-            <div className="col-span-1 md:col-span-1">
-              <UploadBond
-                endpoint="bond"
-                isAdmin={isAdmin}
-                title="Bond Portofolio"
-                previsualize={(
-                  dataTableData,
-                  rejectedDataTableData,
-                  endpoint,
-                  isAdmin
-                ) =>
-                  previsualizeData(
+            {portfolioTypes.map(({ endpoint, title }) => (
+              <div key={endpoint} className="col-span-1 md:col-span-1">
+                <UploadBond
+                  endpoint={endpoint}
+                  isAdmin={isAdmin}
+                  title={title}
+                  previsualize={(
                     dataTableData,
                     rejectedDataTableData,
                     endpoint,
                     isAdmin
-                  )
-                }
-              />
-            </div>
-            <div className="col-span-1 md:col-span-1">
-              <UploadBond
-                endpoint="customer_loan"
-                isAdmin={isAdmin}
-                title="Customer Loans Portofolio"
-                previsualize={(
-                  dataTableData,
-                  rejectedDataTableData,
-                  endpoint,
-                  isAdmin
-                ) =>
-                  previsualizeData(
-                    dataTableData,
-                    rejectedDataTableData,
-                    endpoint,
-                    isAdmin
-                  )
-                }
-              />
-            </div>
-            <div className="col-span-1 md:col-span-1">
-              <UploadBond
-                endpoint="eib"
-                isAdmin={isAdmin}
-                title="EIB Portofolio"
-                previsualize={(
-                  dataTableData,
-                  rejectedDataTableData,
-                  endpoint,
-                  isAdmin
-                ) =>
-                  previsualizeData(
-                    dataTableData,
-                    rejectedDataTableData,
-                    endpoint,
-                    isAdmin
-                  )
-                }
-              />
-            </div>
-            <div className="col-span-1 md:col-span-1">
-              <UploadBond
-                endpoint="pib"
-                isAdmin={isAdmin}
-                title="PIB Portofolio"
-                previsualize={(
-                  dataTableData,
-                  rejectedDataTableData,
-                  endpoint,
-                  isAdmin
-                ) =>
-                  previsualizeData(
-                    dataTableData,
-                    rejectedDataTableData,
-                    endpoint,
-                    isAdmin
-                  )
-                }
-              />
-            </div>
-            <div className="col-span-1 md:col-span-1">
-              <UploadBond
-                endpoint="dat"
-                isAdmin={isAdmin}
-                title="DAT Portofolio"
-                previsualize={(
-                  dataTableData,
-                  rejectedDataTableData,
-                  endpoint,
-                  isAdmin
-                ) =>
-                  previsualizeData(
-                    dataTableData,
-                    rejectedDataTableData,
-                    endpoint,
-                    isAdmin
-                  )
-                }
-              />
-            </div>
-            <div className="col-span-1 md:col-span-1">
-              <UploadBond
-                endpoint="refi"
-                isAdmin={isAdmin}
-                title="Refi Portofolio"
-                previsualize={(
-                  dataTableData,
-                  rejectedDataTableData,
-                  endpoint,
-                  isAdmin
-                ) =>
-                  previsualizeData(
-                    dataTableData,
-                    rejectedDataTableData,
-                    endpoint,
-                    isAdmin
-                  )
-                }
-              />
-            </div>
-            <div className="col-span-1 md:col-span-1">
-              <UploadBond
-                endpoint="op_injection"
-                isAdmin={isAdmin}
-                title="OP Injection Portofolio"
-                previsualize={(
-                  dataTableData,
-                  rejectedDataTableData,
-                  endpoint,
-                  isAdmin
-                ) =>
-                  previsualizeData(
-                    dataTableData,
-                    rejectedDataTableData,
-                    endpoint,
-                    isAdmin
-                  )
-                }
-              />
-            </div>
-            <div className="col-span-1 md:col-span-1">
-              <UploadBond
-                endpoint="op_retrait"
-                isAdmin={isAdmin}
-                title="OP Retrait Portofolio"
-                previsualize={(
-                  dataTableData,
-                  rejectedDataTableData,
-                  endpoint,
-                  isAdmin
-                ) =>
-                  previsualizeData(
-                    dataTableData,
-                    rejectedDataTableData,
-                    endpoint,
-                    isAdmin
-                  )
-                }
-              />
-            </div>
+                  ) =>
+                    previsualizeData(
+                      dataTableData,
+                      rejectedDataTableData,
+                      endpoint,
+                      isAdmin
+                    )
+                  }
+                />
+              </div>
+            ))}
           </div>
         </div>
       )}

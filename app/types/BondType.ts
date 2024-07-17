@@ -55,3 +55,14 @@ export type BondProp = {
     user: number,
     portofolio: string
 }
+
+export type BondPortofolioPageProps = {
+    bilan: string,
+    bonds: BondProp[],
+    id: string,
+    is_active: boolean,
+    is_simulated: boolean,
+    name: string,
+    start: string,
+    user: number
+}

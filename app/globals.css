@@ -87,3 +87,46 @@ html, body, :root {
 .font-paytone {
   font-family: 'Paytone One', sans-serif;
 }
+
+.dual-kanban-board {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.kanban-board {
+  flex: 1;
+  margin: 0 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.kanban-column {
+  flex: 1;
+  margin: 0 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.kanban-column h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.kanban-tasks {
+  min-height: 200px;
+}
+
+.kanban-task {
+  background: #e1e1e1;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}

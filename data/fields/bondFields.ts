@@ -143,7 +143,7 @@ const BondFields : AllFormField[ ]= [
     {
       name: "reference_value",
       type: "text",
-      placeholder: "Bond Daily Cotation",
+      placeholder: "Bond Reference Value",
     },
   ];
 

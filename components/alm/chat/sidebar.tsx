@@ -33,10 +33,10 @@ export function Sidebar({rooms, isCollapsed, me, isMobile, chooseRoom }: Sidebar
       className="relative group flex flex-col h-full gap-4 p-2 data-[collapsed=true]:p-2 "
     >
         <div className={clsx("flex  p-2 items-center", isCollapsed?'flex-col':'justify-between')}>
-          <div className="flex gap-2 items-center text-md">
+          {/* <div className="flex gap-2 items-center text-md">
             <p className="font-medium">Chats</p>
             <span className="text-zinc-300">({rooms.length})</span>
-          </div>
+          </div> */}
 
           <div className={clsx('flex', isCollapsed?'flex-row':'')}>
             <Link

@@ -18,7 +18,7 @@ export function Chat({ selectedRoom, isMobile, me }: ChatProps) {
     selectedRoom?.messages ?? []
   );
 
-  const isPrompted = selectedRoom?.participants?.some((participant) => participant.is_staff) || false;
+  const isPrompted =  false;
 
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
     "ws://localhost:8000/ws/" + selectedRoom.id + "/",

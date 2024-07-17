@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
   const [inputValue, setInputValue] = React.useState<string>("");
 
   const getChoosenFields = (endpoint: string | undefined) => {
-    if (endpoint === "bond") {
+    if (endpoint === "bond") { 
       return BondFields;
     } else {
       return AdminBondFields;

@@ -1,5 +1,5 @@
 "use client";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import {
   Accordion,
@@ -31,6 +31,10 @@ import DurationView from "../DurationView";
 import EconomicValueView from "../EcomicValueView";
 import { useState } from "react";
 import clsx from "clsx";
+import { Button } from "@/components/ui/button";
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerTrigger } from "@/components/ui/drawer";
+import { IoCloudUploadOutline } from "react-icons/io5";
+import UploadBondPage from "../../uploads/UploadBondPage";
 
 interface BondPortofolioPageProps {
   bonds: BondProp[];
@@ -84,14 +88,13 @@ const BondPortofolioPage = ({ bonds }: BondPortofolioPageProps) => {
       description="Find all your portofolio bonds here ..."
     >
       <div className="w-full">
-        <div className="flex">
-          <ScrollArea className="h-72 w-24 rounded-md border">
+        {bonds.length > 0 ? ( <div className="flex">
+          <ScrollArea className="h-full w-24 rounded-md border">
             <div className="p-1">
               <h4 className="mb-4 text-xs font-medium leading-none">Isin</h4>
               {bonds.map((bond, index) => (
                 <div key={bond.id}>
                   <div
-                    
                     className={clsx(`text-[9px] cursor-pointer py-1`, bond === choosenBond && "bg-foreground/10")}
                     onClick={() => setChoosenBond(bond)}
                   >
@@ -121,7 +124,30 @@ const BondPortofolioPage = ({ bonds }: BondPortofolioPageProps) => {
               )}
             </Accordion>
           </div>
-        </div>
+        </div>):(
+          <div className="flex flex-col justify-center items-center h-72">
+            <span className="text-xs font-medium">No bond found</span>
+            <Drawer>
+            <DrawerTrigger className="flex items-center  h-12 px-2 mt-2 rounded">
+              <span className="flex items-center w-full border p-2 rounded shadow">
+                <IoCloudUploadOutline className="w-4 h-4 stroke-current" />
+                <span className="md:ml-2 text-[10px] font-medium sr-only sm:not-sr-only sm:whitespace-nowrap">Add Bond</span>
+              </span>
+            </DrawerTrigger>
+            <DrawerContent>
+              <ScrollArea className="flex w-full">
+                <UploadBondPage />
+                <ScrollBar orientation="vertical" />
+              </ScrollArea>
+              <DrawerFooter>
+                <DrawerClose className="flex justify-end items-center">
+                  <Button variant="destructive">Cancel</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+          </div>
+        )}
       </div>
     </Section>
   );

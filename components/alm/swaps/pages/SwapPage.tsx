@@ -29,7 +29,7 @@ import { SwapType } from "@/app/types/SwapType";
 
 interface SwapPageProps {
   bonds: BondProp[];
-  swaps: SwapType[];
+  swaps: SwapType[] | undefined;
 }
 const SwapPage = ({ bonds, swaps }: SwapPageProps) => {
   const [choosenSwap, setChoosenSwap] = React.useState<SwapType | null>(null);
@@ -37,7 +37,7 @@ const SwapPage = ({ bonds, swaps }: SwapPageProps) => {
   const [addSwapTrigger, setAddSwapTrigger] = React.useState<boolean>(false);
   return (
     <Section title="Swaps" description="Here are swaps ...">
-      <div className="w-full">
+      {swaps && swaps.length > 0 ? (<div className="w-full">
         <ToggleGroup
           type="single"
           className="m-0 mb-2 border flex justify-end items-center"
@@ -129,7 +129,12 @@ const SwapPage = ({ bonds, swaps }: SwapPageProps) => {
             </div>
           </div>
         )}
-      </div>
+      </div>) : (
+        <div className="flex justify-center items-center h-72">
+          <span className="text-xs font-medium">No swap found</span>
+        </div>
+      
+      )}
     </Section>
   );
 };

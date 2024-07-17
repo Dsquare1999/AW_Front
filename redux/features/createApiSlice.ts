@@ -1,4 +1,4 @@
-import { SpreadSchema, SwapSchema } from "@/schemas";
+import { SpreadSchema, SwapSchema, BondPortofolioSchema, SwitchBondPortofolioSchema } from "@/schemas";
 import { z } from "zod";
 import { apiSlice } from "../services/apiSlice";
 
@@ -37,10 +37,31 @@ const createApiSlice = apiSlice.injectEndpoints({
         body: { offer, offer_duration, offer_quantity, offer_return, offer_country, demand_duration, demand_quantity, demand_return, demand_country},
       }),
     }),
+    createBondPortofolio: builder.mutation({
+      query: ({
+        name,
+        is_simulated,
+        start,
+      }: z.infer<typeof BondPortofolioSchema>) => ({
+        url: "/bond_portofolio/",
+        method: "POST",
+        body: { name, is_simulated, start },
+      }),
+    }),
+    switchBondPortofolio: builder.mutation({
+      query: ({
+        portofolio,
+      }: z.infer<typeof SwitchBondPortofolioSchema>) => ({
+        url: `/bond_portofolio/${portofolio}/switch/`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
 export const { 
 	useCreateSpreadMutation, 
-	useCreateSwapMutation 
+	useCreateSwapMutation, 
+  useCreateBondPortofolioMutation,
+  useSwitchBondPortofolioMutation,
 } = createApiSlice;

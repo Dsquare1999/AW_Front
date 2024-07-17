@@ -35,17 +35,14 @@ import clsx from "clsx";
 import AddSpreads from "../AddSpread";
 
 interface SpreadPageProps {
-  spreads: SpreadType[];
+  spreads: SpreadType[] | undefined;
 }
 const SpreadPage = ({ spreads }: SpreadPageProps) => {
-  const [choosenSpread, setChoosenSpread] = React.useState<SpreadType | null>(
-    null
-  );
-  const [addSpreadTrigger, setAddSpreadTrigger] =
-    React.useState<boolean>(false);
+  const [choosenSpread, setChoosenSpread] = React.useState<SpreadType | null>(null);
+  const [addSpreadTrigger, setAddSpreadTrigger] = React.useState<boolean>(false);
   return (
     <Section title="Spreads" description="Here are spreads ...">
-      <div className="w-full">
+      {spreads && spreads.length > 0 ? (<div className="w-full">
         <ToggleGroup
           type="single"
           className="m-0 mb-2 border flex justify-end items-center"
@@ -155,7 +152,12 @@ const SpreadPage = ({ spreads }: SpreadPageProps) => {
             </div>
           </div>
         )}
-      </div>
+      </div>) : (
+        <div className="flex justify-center items-center h-72">
+          <span className="text-xs font-medium">No spread found</span>
+        </div>
+      
+      )}
     </Section>
   );
 };

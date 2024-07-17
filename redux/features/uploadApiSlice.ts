@@ -2,7 +2,6 @@ import { BondSchema, AdminBondSchema } from '@/schemas';
 import { apiSlice } from '../services/apiSlice';
 import { z } from 'zod';
 
-
 const uploadApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
         backoffice: builder.mutation({

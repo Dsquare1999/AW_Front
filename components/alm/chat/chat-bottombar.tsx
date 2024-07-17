@@ -63,7 +63,6 @@ export default function ChatBottombar({
         room: selectedRoom.id,
         read_by: [me.id],
         isPrompted: isPrompted,
-
       };
       sendMessage(newMessage, me);
       setMessage("");

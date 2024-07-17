@@ -39,7 +39,7 @@ type Props = {
 
 
 
-export const DispalyTable = ({FilesDataTables, RejectedFilesDataTables, endpoint, isAdmin, updateData}: Props) => {
+export const DisplayTable = ({FilesDataTables, RejectedFilesDataTables, endpoint, isAdmin, updateData}: Props) => {
     const [isins, setIsins] = useState<string[]>([]);
     const [dataTableData, setDataTableData] = useState<DataTableProps[]>(FilesDataTables)
     const [rejectedDataTableData, setRejectedDataTableData] = useState<DataTableProps[]>(RejectedFilesDataTables)
@@ -259,7 +259,7 @@ export const DispalyTable = ({FilesDataTables, RejectedFilesDataTables, endpoint
                           {dataTable.sheets.map((sheet) => (
                             <TabsContent key={sheet.sheetName} value={sheet.sheetName}>
                               <DataTable columns={Columns(sheet.headers, (rowId) => deleteRow(rowId, dataTable.fileId, sheet.sheetId, false))} 
-                                          data={sheet.rows} 
+                                          data={sheet.rows}
                                           endpoint={endpoint}
                                           handleChange={(newData : RowData[]) => updateValue(newData, dataTable.fileId, sheet.sheetId, false)} 
                                           addNewBond={(newRow) => addNewRow(newRow, dataTable.fileId, sheet.sheetId)} />
